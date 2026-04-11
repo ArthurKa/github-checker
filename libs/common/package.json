@@ -1,0 +1,24 @@
+{
+  "name": "@repo/common",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "lint": "eslint --ext js,jsx,ts,tsx --max-warnings=0 src .eslintrc.js",
+    "lint:fix": "npm run lint -- --fix",
+    "ts:noWatch": "true",
+    "test": "true",
+    "test:noWatch": "true"
+  },
+  "dependencies": {
+    "@arthurka/ts-utils": "3.17.2",
+    "assert": "2.1.0",
+    "bson": "6.10.4",
+    "uuid": "11.1.0",
+    "zod": "3.25.74"
+  },
+  "devDependencies": {
+    "@types/assert": "1.5.11",
+    "@types/node": "22.15.3",
+    "typescript": "5.8.3"
+  }
+}

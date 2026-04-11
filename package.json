@@ -1,0 +1,33 @@
+{
+  "name": "repo",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "prune": "rm -rf node_modules && npm run prune:sub && npm run prune:build",
+    "prune:sub": "rm -rf {apps,libs}/*/node_modules",
+    "prune:build": "rm -rf {apps,libs}/*/dist",
+    "api:dev": "npm run start-checks && npm run dev -w apps/api",
+    "api:mongodump": "npm run mongodump -w apps/api",
+    "api:mongorestore": "npm run mongorestore -w apps/api",
+    "api:migration:create": "npm run start-checks && npm run migration:create -w apps/api",
+    "api:ts:noWatch": "npm run start-checks && npm run ts:noWatch -w apps/api",
+    "api:start": "npm run start-checks && npm run start -w apps/api",
+    "repo-fix": "node helpers/eslint-helper.js --fix",
+    "start-checks": "node helpers/start-checks.js && node helpers/check-package-versions.js && node helpers/modify-node-modules/index.js --check",
+    "preinstall": "node helpers/modify-node-modules/index.js && npm run start-checks",
+    "prepare": "node -e \"try { require('husky').install(); } catch(e) { if(e.code !== 'MODULE_NOT_FOUND') throw e; }\""
+  },
+  "devDependencies": {
+    "@arthurka/eslint": "3.15.4",
+    "@arthurka/ts-reset": "1.13.0",
+    "@total-typescript/ts-reset": "0.5.1",
+    "@tsconfig/node18-strictest": "1.0.0",
+    "@types/semver": "7.7.1",
+    "husky": "8.0.3",
+    "semver": "7.7.2"
+  },
+  "workspaces": [
+    "apps/*",
+    "libs/*"
+  ]
+}

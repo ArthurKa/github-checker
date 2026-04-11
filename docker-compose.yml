@@ -1,0 +1,101 @@
+services:
+  mongo: &mongo
+    networks:
+      - github-checker
+    profiles:
+      - prod
+    restart: unless-stopped
+    container_name: github-checker_mongo
+    image: mongo:8.0.8
+    healthcheck: &mongo-healthcheck
+      test: >
+        mongosh --port 27017 --quiet --eval "
+          let res;
+          try {
+            res = rs.status();
+          } catch(e) {
+            rs.initiate({
+              _id: 'rs0',
+              members: [{ _id: 0, host: 'mongo:27017' }],
+            });
+            res = rs.status();
+          }
+
+          if(res.ok !== 1) {
+            exit(1);
+          }
+        "
+    volumes:
+      - ./db-data:/data/db:rw
+    command: mongod --replSet rs0
+
+  mongo-dev:
+    <<: *mongo
+    profiles:
+      - dev
+    healthcheck:
+      <<: *mongo-healthcheck
+      test: >
+        mongosh --port 27017 --quiet --eval "
+          let res;
+          try {
+            res = rs.status();
+          } catch(e) {
+            rs.initiate({
+              _id: 'rs0',
+              members: [{ _id: 0, host: 'localhost:27017' }],
+            });
+            res = rs.status();
+          }
+
+          if(res.ok !== 1) {
+            exit(1);
+          }
+        "
+    ports:
+      - 127.0.0.1:27017:27017
+
+  nginx-certbot:
+    networks:
+      - github-checker
+    profiles:
+      - dev
+    restart: unless-stopped
+    container_name: github-checker_nginx-certbot
+    image: jonasal/nginx-certbot:5.2.0-alpine
+    ports:
+      - 127.0.0.1:80:80
+      - 127.0.0.1:443:443
+    environment:
+      CERTBOT_EMAIL: unused@email.com
+    volumes:
+      - ./certbot-secrets:/etc/letsencrypt:rw
+      - ./deploy/nginx/local/docker-entrypoint.sh:/docker-entrypoint.sh:ro
+      - ./deploy/nginx/local/redirector.conf:/etc/nginx/conf.d/redirector.conf:ro
+      - ./deploy/nginx/local/config:/nginx-volumes/config:ro
+      - ./deploy/nginx/local/github-checker:/nginx-volumes/github-checker:ro
+      - ./mkcert:/mkcert:ro
+
+  api:
+    networks:
+      - github-checker
+    profiles:
+      - prod
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: api
+    image: github-checker_api
+    container_name: github-checker_api
+    restart: unless-stopped
+    expose:
+      - 3000
+    depends_on:
+      mongo:
+        condition: service_healthy
+    env_file: .env
+    entrypoint: npm run api:start
+
+networks:
+  github-checker:
+    external: true

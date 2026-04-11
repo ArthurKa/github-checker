@@ -1,0 +1,21 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": [
+      "ESNext",
+    ],
+    "paths": {
+      "@repo/common/src/*": [
+        "../../../libs/common/src/*",
+      ],
+    },
+    "noEmit": true,
+  },
+  "include": [
+    "src",
+    "../../libs/common/src",
+  ],
+  "exclude": [
+    "node_modules",
+  ],
+}

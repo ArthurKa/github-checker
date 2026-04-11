@@ -1,0 +1,47 @@
+{
+  "name": "@repo/api",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "lint": "eslint --ext js,jsx,ts,tsx --max-warnings=0 src .eslintrc.js",
+    "lint:fix": "npm run lint -- --fix",
+    "ts:noWatch": "tsc --noEmit -p tsconfig.json",
+    "ts": "npm run ts:noWatch -- --watch",
+    "test": "vitest",
+    "test:noWatch": "npm run test -- run",
+    "_dev": "nodemon --delay 0.5 -w ../../.env -x \"dotenv -e ../../.env -- tsx watch --clear-screen=false src/index.ts\"",
+    "dev": "concurrently -r \"npm run ts -- --preserveWatchOutput\" \"npm run _dev\"",
+    "start": "tsx src/index.ts",
+    "mongodump": "docker exec github-checker_mongo mongodump --db=github-checker --archive=/data/github-checker.gzip --gzip && docker cp github-checker_mongo:/data/github-checker.gzip ./dump/github-checker.gzip && docker exec github-checker_mongo rm -rf /data/github-checker.gzip",
+    "mongorestore": "docker cp ./dump/github-checker.gzip github-checker_mongo:/data/github-checker.gzip && docker exec github-checker_mongo mongosh github-checker --eval \"db.dropDatabase()\" && docker exec github-checker_mongo mongorestore --nsInclude=\"*\" --archive=/data/github-checker.gzip --gzip && docker exec github-checker_mongo rm -rf /data/github-checker.gzip",
+    "migration:create": "node -e \"fs.writeFileSync( require( 'path' ).resolve( __dirname, 'migrations', ( new Date().toISOString().replace(/\\-|\\T|\\:|\\.|\\Z/g, '').slice(0, -3) + '-RENAME_ME.js' ) ), '// @ts-check\\n\\'use strict\\';\\nmodule.exports = ((/** @type {Pick<import(\\'migrate-mongo\\'), \\'up\\'>} */ e) => e)({\\nasync up(db) {\\nreturn [];\\n},\\n});\\n' )\""
+  },
+  "dependencies": {
+    "@arthurka/ts-utils": "3.17.2",
+    "@repo/common": "1.0.0",
+    "cookie-parser": "1.4.7",
+    "cors": "2.8.5",
+    "express": "5.1.0",
+    "migrate-mongo": "12.1.3",
+    "mongodb": "6.16.0",
+    "node-cron": "4.2.1",
+    "nodemailer": "7.0.13",
+    "query-string": "9.3.1",
+    "swagger-ui-express": "5.0.1",
+    "tsx": "4.20.6"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "1.4.10",
+    "@types/cors": "2.8.19",
+    "@types/express": "5.0.5",
+    "@types/migrate-mongo": "10.0.5",
+    "@types/node": "22.15.3",
+    "@types/nodemailer": "7.0.11",
+    "@types/swagger-ui-express": "4.1.8",
+    "concurrently": "8.2.2",
+    "dotenv-cli": "7.4.2",
+    "nodemon": "3.1.10",
+    "typescript": "5.8.3",
+    "vitest": "4.1.4"
+  }
+}

@@ -1,0 +1,12 @@
+**node_modules
+**Dockerfile
+**docker-compose.yml
+**.dockerignore
+.git*
+.husky
+**dist
+**README.md
+prod-build
+**.next
+**.tsbuildinfo
+**turbo.json
