@@ -55,6 +55,30 @@ services:
     ports:
       - 127.0.0.1:27017:27017
 
+  redis: &redis
+    networks:
+      - github-checker
+    profiles:
+      - prod
+    image: redis:7.4.3
+    container_name: github-checker_redis
+    restart: unless-stopped
+    expose:
+      - 6379
+    volumes:
+      - ./redis-data:/data
+    command: >-
+      redis-server
+        --appendonly yes
+        --requirepass ${REDIS_PASS:?}
+
+  redis-dev:
+    <<: *redis
+    profiles:
+      - dev
+    ports:
+      - 127.0.0.1:6379:6379
+
   nginx-certbot:
     networks:
       - github-checker

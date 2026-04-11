@@ -2,20 +2,17 @@ import { RepoName } from '@repo/common/src/brands';
 import { Repo } from '@repo/common/src/zod/github';
 import assert from 'assert';
 import { GitHubApiResp } from '@repo/common/src/types';
-import { isNull } from '@arthurka/ts-utils';
-import { githubFetchHelper } from './fetchHelper';
-import { handleGitHubApiRespErrors } from './common';
+import { githubFetchHelper } from './common/fetchHelper';
 import { githubApiUrls } from './githubApiUrls';
+import { makeGitHubApiRequestWithCache } from './common/makeGitHubApiRequestWithCache';
 
 export const getRepoByRepoName = async (repoName: RepoName): Promise<GitHubApiResp<Repo>> => {
-  const res = await githubFetchHelper.get(githubApiUrls.repoByName(repoName));
-
-  const handledError = handleGitHubApiRespErrors(res);
-  if(!isNull(handledError)) {
-    return handledError;
+  const res = await makeGitHubApiRequestWithCache(githubApiUrls.repoByName(repoName), url => githubFetchHelper.get(url));
+  if(res.success === false) {
+    return res;
   }
 
-  const { success, data } = Repo.safeParse(await res.json());
+  const { success, data } = Repo.safeParse(JSON.parse(res.data));
   assert(success === true, 'Something went wrong. |8mab5a|');
 
   return {

@@ -27,7 +27,7 @@ export const sendSubscriptionConfirmationMail = async ({ to, repoName, repoRelea
   const latestTagText = (
     isNull(repoRelease)
       ? 'For now there is no release tag in the repo yet.'
-      : `For now the latest release tag is <a href="${repoRelease.htmlUrl}">${repoRelease.tag}</a>.`
+      : `For now the latest release tag is <a href="${repoRelease.html_url}">${repoRelease.tag_name}</a>.`
   );
 
   await transporter.sendMail({
@@ -53,7 +53,7 @@ export const sendReleaseUpdateMail = async ({ to, repoName, repoRelease, unsubsc
   const tagUpdateText = (
     isNull(repoRelease)
       ? 'removed all release tags.'
-      : `changed release tag to <a href="${repoRelease.htmlUrl}">${repoRelease.tag}</a>. Take a look!`
+      : `changed release tag to <a href="${repoRelease.html_url}">${repoRelease.tag_name}</a>. Take a look!`
   );
   const subscriptionsUrl = stringifyUrl(`${API_URL}${apiUrls.subscriptions}`, {
     email: to,

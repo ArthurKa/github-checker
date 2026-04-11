@@ -7,6 +7,7 @@ const Envs = z.object({
   GITHUB_API_TOKEN: customNonEmptyString,
   GOOGLE_APP_PASS: customNonEmptyString,
   NODEMAILER_SENDER: customEmail,
+  REDIS_CONNECTION_URL: customNonEmptyString,
 });
 type Envs = z.infer<typeof Envs>;
 
@@ -26,3 +27,4 @@ export const MONGO_URL = envs.MONGO_URL;
 export const GITHUB_API_TOKEN = envs.GITHUB_API_TOKEN;
 export const GOOGLE_APP_PASS = envs.GOOGLE_APP_PASS;
 export const NODEMAILER_SENDER = envs.NODEMAILER_SENDER;
+export const REDIS_CONNECTION_URL = envs.REDIS_CONNECTION_URL;

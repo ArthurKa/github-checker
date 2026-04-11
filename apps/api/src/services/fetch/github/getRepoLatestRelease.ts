@@ -1,19 +1,20 @@
-import { RepoId, RepoName } from '@repo/common/src/brands';
+import { NoTrailingSlashStringURL, RepoId, RepoName } from '@repo/common/src/brands';
 import assert from 'assert';
 import { RepoReleases } from '@repo/common/src/zod/github/RepoReleases';
 import { GitHubApiResp } from '@repo/common/src/types';
 import { isNull, isUndefined } from '@arthurka/ts-utils';
-import { githubFetchHelper } from './fetchHelper';
-import { handleGitHubApiRespErrors } from './common';
+import { githubFetchHelper } from './common/fetchHelper';
 import { githubApiUrls } from './githubApiUrls';
+import { makeGitHubApiRequestWithCache } from './common/makeGitHubApiRequestWithCache';
+import { redisService } from '../../redisService';
 
-const handleResp = async (res: Response): Promise<GitHubApiResp<RepoReleases[number] | null>> => {
-  const handledError = handleGitHubApiRespErrors(res);
-  if(!isNull(handledError)) {
-    return handledError;
+const handleResp = async (url: NoTrailingSlashStringURL): Promise<GitHubApiResp<RepoReleases[number] | null>> => {
+  const res = await makeGitHubApiRequestWithCache(url, url => githubFetchHelper.get(url));
+  if(res.success === false) {
+    return res;
   }
 
-  const { success, data } = RepoReleases.safeParse(await res.json());
+  const { success, data } = RepoReleases.safeParse(JSON.parse(res.data));
   assert(success === true, 'Something went wrong. |t0d9a8|');
 
   return {
@@ -22,14 +23,22 @@ const handleResp = async (res: Response): Promise<GitHubApiResp<RepoReleases[num
   };
 };
 
-export const getRepoLatestReleaseByRepoName = async (repoName: RepoName) => {
-  const res = await githubFetchHelper.get(githubApiUrls.repoReleasesByName(repoName));
+export const getRepoLatestReleaseByRepoName = (repoName: RepoName) => (
+  handleResp(githubApiUrls.repoReleasesByName(repoName))
+);
 
-  return handleResp(res);
+export const getRepoLatestReleaseByRepoId = (repoId: RepoId) => (
+  handleResp(githubApiUrls.repoReleasesById(repoId))
+);
+
+export const cacheRepoLatestReleaseByName = async (repoName: RepoName, _data: RepoReleases[number] | null) => {
+  const data = isNull(_data) ? [] : [_data];
+
+  await redisService.githubApiCache.setIfNotExists(githubApiUrls.repoReleasesByName(repoName), JSON.stringify(data));
 };
 
-export const getRepoLatestReleaseByRepoId = async (repoId: RepoId) => {
-  const res = await githubFetchHelper.get(githubApiUrls.repoReleasesById(repoId));
+export const cacheRepoLatestReleaseById = async (repoId: RepoId, _data: RepoReleases[number] | null) => {
+  const data = isNull(_data) ? [] : [_data];
 
-  return handleResp(res);
+  await redisService.githubApiCache.setIfNotExists(githubApiUrls.repoReleasesById(repoId), JSON.stringify(data));
 };

@@ -1,6 +1,6 @@
 import { isNull } from '@arthurka/ts-utils';
 import { subscriptionService } from '../services/db/subscriptionService';
-import { getRepoLatestReleaseByRepoId } from '../services/fetch/github/getRepoLatestRelease';
+import { cacheRepoLatestReleaseByName, getRepoLatestReleaseByRepoId } from '../services/fetch/github/getRepoLatestRelease';
 import { notify } from '../services/notifier/notify';
 import { shouldNotifyReleaseUpdate } from './shouldNotifyReleaseUpdate';
 import { repoService } from '../services/db/repoService';
@@ -25,7 +25,9 @@ export const checkRepoReleases = async () => {
       }
     }
 
-    const latestTag = isNull(repoLatestRelease.data) ? null : repoLatestRelease.data.tag;
+    await cacheRepoLatestReleaseByName(repo.name, repoLatestRelease.data);
+
+    const latestTag = isNull(repoLatestRelease.data) ? null : repoLatestRelease.data.tag_name;
 
     if(!shouldNotifyReleaseUpdate(repo, latestTag)) {
       continue;

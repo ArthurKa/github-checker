@@ -6,7 +6,7 @@ import { generateUUID } from '@repo/common/src/utils';
 import { SubscribeToken } from '@repo/common/src/brands';
 import { subscriptionService } from '../services/db/subscriptionService';
 import { getRepoByRepoName } from '../services/fetch/github/getRepoByRepoName';
-import { getRepoLatestReleaseByRepoName } from '../services/fetch/github/getRepoLatestRelease';
+import { cacheRepoLatestReleaseById, getRepoLatestReleaseByRepoName } from '../services/fetch/github/getRepoLatestRelease';
 import { repoService } from '../services/db/repoService';
 import { sendSubscriptionConfirmationMail } from '../services/mailer';
 import { shouldNotifyReleaseUpdate } from '../utils/shouldNotifyReleaseUpdate';
@@ -73,7 +73,9 @@ export const mountSubscribe = (app: Express) => {
       return;
     }
 
-    const latestTag = isNull(repoLatestRelease.data) ? null : repoLatestRelease.data.tag;
+    await cacheRepoLatestReleaseById(githubRepo.data.id, repoLatestRelease.data);
+
+    const latestTag = isNull(repoLatestRelease.data) ? null : repoLatestRelease.data.tag_name;
     const [subscription, repoBefore] = await Promise.all([
       subscriptionService.create({
         email: data.email,
@@ -86,7 +88,7 @@ export const mountSubscribe = (app: Express) => {
       repoService.createOrUpdateWithReturnBefore({
         id: githubRepo.data.id,
         latestTag,
-        name: githubRepo.data.repoName,
+        name: githubRepo.data.full_name,
       }),
     ]);
 
@@ -105,7 +107,7 @@ export const mountSubscribe = (app: Express) => {
 
     await sendSubscriptionConfirmationMail({
       to: data.email,
-      repoName: githubRepo.data.repoName,
+      repoName: githubRepo.data.full_name,
       repoRelease: repoLatestRelease.data,
       subscribeToken: subscription.confirmation.subscribeToken,
     });

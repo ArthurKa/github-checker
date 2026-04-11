@@ -15,6 +15,9 @@
     "editor.defaultFormatter": "ms-azuretools.vscode-containers"
   },
   "cSpell.words": [
-    "jonasal"
+    "appendonly",
+    "getdel",
+    "jonasal",
+    "requirepass"
   ]
 }
