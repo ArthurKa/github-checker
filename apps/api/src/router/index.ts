@@ -6,12 +6,14 @@ import { mountSubscribe } from './subscribe';
 import { mountConfirm } from './confirm';
 import { mountSubscriptions } from './subscriptions';
 import { mountUnsubscribe } from './unsubscribe';
+import { mountMetrics } from './metrics';
 
 export const mountRouter = (app: Express) => {
   mountSubscribe(app);
   mountConfirm(app);
   mountUnsubscribe(app);
   mountSubscriptions(app);
+  mountMetrics(app);
 
   app.use('/', swaggerUi.serve, swaggerUi.setup(null, {
     customSiteTitle: 'GitHub Checker API',
