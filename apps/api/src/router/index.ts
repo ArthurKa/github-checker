@@ -15,17 +15,17 @@ export const mountRouter = (app: Express) => {
   mountSubscriptions(app);
   mountMetrics(app);
 
-  app.use('/', swaggerUi.serve, swaggerUi.setup(null, {
-    customSiteTitle: 'GitHub Checker API',
-    swaggerOptions: {
-      url: '/swagger.yml',
-    },
-  }));
-
   app.get<unknown, routes.health.RouteResponse>(apiUrls.health, (req, res) => {
     res.json({
       success: true,
       data: true,
     });
   });
+
+  app.use('/', swaggerUi.serve, swaggerUi.setup(null, {
+    customSiteTitle: 'GitHub Checker API',
+    swaggerOptions: {
+      url: '/swagger.yml',
+    },
+  }));
 };
