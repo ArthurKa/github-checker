@@ -1,6 +1,7 @@
 import { Express } from 'express';
 import { routes } from '@repo/common/src/zod';
 import { apiUrls } from '@repo/common/src/commonUrls';
+import { simplifyZodIssues } from '@repo/common/src/zod/utils/simplifyZodIssues';
 import { subscriptionService } from '../services/db/subscriptionService';
 import { repoService } from '../services/db/repoService';
 import { makeSubscriptionsRespData } from '../utils/makeSubscriptionsRespData';
@@ -13,7 +14,7 @@ export const mountSubscriptions = (app: Express) => {
         success: false,
         error: {
           type: 'WrongQueryParams',
-          __WARNING_DO_NOT_USE__zodIssues: error.issues,
+          simplifiedZodIssues: simplifyZodIssues(error.issues),
         },
       });
       return;

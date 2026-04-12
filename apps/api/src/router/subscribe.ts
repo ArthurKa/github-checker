@@ -4,6 +4,7 @@ import { apiUrls } from '@repo/common/src/commonUrls';
 import { isNull } from '@arthurka/ts-utils';
 import { generateUUID } from '@repo/common/src/utils';
 import { SubscribeToken } from '@repo/common/src/brands';
+import { simplifyZodIssues } from '@repo/common/src/zod/utils/simplifyZodIssues';
 import { subscriptionService } from '../services/db/subscriptionService';
 import { getRepoByRepoName } from '../services/fetch/github/getRepoByRepoName';
 import { cacheRepoLatestReleaseById, getRepoLatestReleaseByRepoName } from '../services/fetch/github/getRepoLatestRelease';
@@ -20,7 +21,7 @@ export const mountSubscribe = (app: Express) => {
         success: false,
         error: {
           type: 'WrongBodyParams',
-          __WARNING_DO_NOT_USE__zodIssues: error.issues,
+          simplifiedZodIssues: simplifyZodIssues(error.issues),
         },
       });
       return;

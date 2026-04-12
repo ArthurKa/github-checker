@@ -1,4 +1,5 @@
 import { z } from 'zod/v4';
+import { SimplifiedZodIssues } from './common';
 
 export const UnexpectedServerError = z.object({
   type: z.literal('UnexpectedServerError'),
@@ -10,19 +11,19 @@ export type EachApiRoute = z.infer<typeof EachApiRoute>;
 
 export const WrongUrlParams = z.object({
   type: z.literal('WrongUrlParams'),
-  __WARNING_DO_NOT_USE__zodIssues: z.custom((e): e is z.core.$ZodIssue[] => true),
+  simplifiedZodIssues: SimplifiedZodIssues,
 });
 export type WrongUrlParams = z.infer<typeof WrongUrlParams>;
 
 export const WrongQueryParams = z.object({
   type: z.literal('WrongQueryParams'),
-  __WARNING_DO_NOT_USE__zodIssues: z.custom((e): e is z.core.$ZodIssue[] => true),
+  simplifiedZodIssues: SimplifiedZodIssues,
 });
 export type WrongQueryParams = z.infer<typeof WrongQueryParams>;
 
 export const WrongBodyParams = z.object({
   type: z.literal('WrongBodyParams'),
-  __WARNING_DO_NOT_USE__zodIssues: z.custom((e): e is z.core.$ZodIssue[] => true),
+  simplifiedZodIssues: SimplifiedZodIssues,
 });
 export type WrongBodyParams = z.infer<typeof WrongBodyParams>;
 
