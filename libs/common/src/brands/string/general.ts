@@ -7,7 +7,7 @@ export type RepoName = Brand<NonEmptyString, 'RepoName'>;
 export const isRepoName = (e: unknown): e is RepoName => (
   true
     && isNonEmptyString(e)
-    && !isNull(e.match(/[^/]+\/[^/]+/))
+    && !isNull(e.match(/^[^/]+\/[^/]+$/))
 );
 export const RepoName = (e: RepoName[WITNESS]): RepoName => (
   initializeByTypeGuard(e, isRepoName, 'RepoName')
