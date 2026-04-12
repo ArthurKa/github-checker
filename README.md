@@ -2,6 +2,16 @@
 
 ## How to run
 
+0. Preinstalls:
+    - on Windows recommended to do once and forget for ever `git config --global core.autocrlf false` (or `git config core.autocrlf false` after `1. git clone` if you don't want to configure it once globally).
+    - install ESLint VS Code extension (https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+    - make sure VS Code is using correct TypeScript version from `node_modules` local folder and not globally installed version
+1. Clone this repo.
+2. Switch Node version to the one specified in `.nvmrc` file.
+3. `npm ci` to install all dependencies.
+4. Put `.env` file in the root of the project.
+5. `./do devUp` to run project dependencies.
+
 ### Certificates
 
 ```bash
