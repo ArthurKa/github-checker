@@ -3,7 +3,7 @@ import { eachApiRoute, inputDataValidationError, TokenNotFound } from '../apiRes
 import { customSubscribeToken } from '../customs';
 
 export const UrlParams = z.object({
-  token: customSubscribeToken.describe('Confirmation token'),
+  token: customSubscribeToken.describe('Subscribe confirmation token'),
 });
 export type UrlParams = z.infer<typeof UrlParams>;
 

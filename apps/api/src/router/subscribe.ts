@@ -24,8 +24,8 @@ export const mountSubscribe = (app: App) => {
     },
   }, async (req, res) => {
     const [githubRepo, repoLatestRelease] = await Promise.all([
-      getRepoByRepoName(req.body.repo),
-      getRepoLatestReleaseByRepoName(req.body.repo),
+      getRepoByRepoName(req.body.repoName),
+      getRepoLatestReleaseByRepoName(req.body.repoName),
     ]);
     if(githubRepo.success === false) {
       switch(githubRepo.error) {
@@ -38,7 +38,7 @@ export const mountSubscribe = (app: App) => {
         case 404:
           res.status(404).send({
             type: 'RepoNotFound',
-            repoName: req.body.repo,
+            repoName: req.body.repoName,
           });
           break;
         default:

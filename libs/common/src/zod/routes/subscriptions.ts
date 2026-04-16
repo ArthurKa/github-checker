@@ -14,8 +14,8 @@ export const RouteResponse = {
     z.object({
       email: customEmail,
       repo: customRepoName,
-      confirmed: z.boolean(),
-      last_seen_tag: customReleaseTag.optional(),
+      isConfirmed: z.boolean(),
+      lastSeenTag: customReleaseTag.nullable(),
     }),
   ).describe('Successful operation - list of subscriptions returned'),
 };

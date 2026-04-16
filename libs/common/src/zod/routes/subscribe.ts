@@ -7,11 +7,12 @@ export const ReqBody = (
   z
     .object({
       email: customEmail,
-      repo: customRepoName,
+      repoName: customRepoName,
     })
-    .overwrite(({ repo, ...rest }) => ({
+    .describe('Subscription request')
+    .overwrite(({ repoName, ...rest }) => ({
       ...rest,
-      repo: RepoName(repo.trim()),
+      repoName: RepoName(repoName.trim()),
     }))
 );
 export type ReqBody = z.infer<typeof ReqBody>;
