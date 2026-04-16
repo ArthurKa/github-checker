@@ -1,6 +1,5 @@
 import { z } from 'zod/v4';
-import { makeRouteResponse } from '../common';
-import { AlreadySubscribed, EachApiRoute, GitHubLimitExceeded, RepoNotFound, WrongBodyParams } from '../apiResponseErrors';
+import { AlreadySubscribed, eachApiRoute, GitHubLimitExceeded, inputDataValidationError, RepoNotFound } from '../apiResponseErrors';
 import { customEmail, customRepoName } from '../customs';
 import { RepoName } from '../../brands';
 
@@ -17,8 +16,12 @@ export const ReqBody = (
 );
 export type ReqBody = z.infer<typeof ReqBody>;
 
-export const RouteResponse = makeRouteResponse(
-  z.union([EachApiRoute, WrongBodyParams, GitHubLimitExceeded, RepoNotFound, AlreadySubscribed]),
-  z.literal(true),
-);
-export type RouteResponse = z.infer<typeof RouteResponse>;
+export const RouteResponse = {
+  ...eachApiRoute,
+  ...inputDataValidationError('body/email "bad-email.com" of type String is not valid Email, body/repo "react" of type String is not valid RepoName'),
+  201: z.literal(true).describe('Subscription successful. Confirmation email sent.'),
+  503: GitHubLimitExceeded.describe('GitHub API requests limit exceeded'),
+  404: RepoNotFound.describe('Repository not found on GitHub'),
+  409: AlreadySubscribed.describe('Email already subscribed to this repository'),
+};
+export type RouteResponse = z.infer<z.ZodObject<typeof RouteResponse>>;

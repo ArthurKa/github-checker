@@ -4,6 +4,6 @@ import { initCron } from './cron';
 
 (async (): Promise<void> => {
   await initDb();
-  initApp();
+  await initApp();
   initCron();
 })();

@@ -1,5 +1,5 @@
 import { WithId } from 'mongodb';
-import { RepoReleases } from '@repo/common/src/zod/github/RepoReleases';
+import { RepoReleases } from '@repo/common/src/zod/github';
 import { DbRepo } from '../services/db/repoService';
 import { subscriptionService } from '../services/db/subscriptionService';
 import { sendReleaseUpdateMail } from '../services/mailer';

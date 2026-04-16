@@ -1,9 +1,8 @@
 import { z } from 'zod/v4';
-import { makeRouteResponse } from '../common';
-import { EachApiRoute } from '../apiResponseErrors';
+import { eachApiRoute } from '../apiResponseErrors';
 
-export const RouteResponse = makeRouteResponse(
-  EachApiRoute,
-  z.literal(true),
-);
-export type RouteResponse = z.infer<typeof RouteResponse>;
+export const RouteResponse = {
+  ...eachApiRoute,
+  200: z.literal(true).describe('Service is healthy'),
+};
+export type RouteResponse = z.infer<z.ZodObject<typeof RouteResponse>>;

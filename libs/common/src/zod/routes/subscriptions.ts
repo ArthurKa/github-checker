@@ -1,22 +1,22 @@
 import { z } from 'zod/v4';
-import { makeRouteResponse } from '../common';
-import { EachApiRoute, WrongQueryParams } from '../apiResponseErrors';
+import { eachApiRoute, inputDataValidationError } from '../apiResponseErrors';
 import { customEmail, customReleaseTag, customRepoName } from '../customs';
 
 export const ReqQuery = z.object({
-  email: customEmail,
+  email: customEmail.describe('Email address to look up subscriptions for'),
 });
 export type ReqQuery = z.infer<typeof ReqQuery>;
 
-export const RouteResponse = makeRouteResponse(
-  z.union([EachApiRoute, WrongQueryParams]),
-  z.array(
+export const RouteResponse = {
+  ...eachApiRoute,
+  ...inputDataValidationError('querystring/email "bad-email.com" of type String is not valid Email'),
+  200: z.array(
     z.object({
       email: customEmail,
       repo: customRepoName,
       confirmed: z.boolean(),
       last_seen_tag: customReleaseTag.optional(),
     }),
-  ),
-);
-export type RouteResponse = z.infer<typeof RouteResponse>;
+  ).describe('Successful operation - list of subscriptions returned'),
+};
+export type RouteResponse = z.infer<z.ZodObject<typeof RouteResponse>>;

@@ -6,9 +6,8 @@ const Envs = z.object({
   NODE_ENV: z.enum(['production', 'development']),
   API_URL: customNoTrailingSlashStringURL,
 });
-type Envs = z.infer<typeof Envs>;
 
-let envs: Envs;
+let envs: z.infer<typeof Envs>;
 
 try {
   // eslint-disable-next-line no-process-env

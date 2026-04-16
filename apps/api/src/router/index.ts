@@ -1,31 +1,27 @@
 import { apiUrls } from '@repo/common/src/commonUrls';
-import { Express } from 'express';
 import { routes } from '@repo/common/src/zod';
-import swaggerUi from 'swagger-ui-express';
 import { mountSubscribe } from './subscribe';
 import { mountConfirm } from './confirm';
 import { mountSubscriptions } from './subscriptions';
 import { mountUnsubscribe } from './unsubscribe';
-import { mountMetrics } from './metrics';
+import type { App } from '../app';
+import { mountSwaggerDocs } from './swaggerDocs';
+import { docTags } from '../docTags';
 
-export const mountRouter = (app: Express) => {
+export const mountRouter = async (app: App) => {
+  await mountSwaggerDocs(app);
   mountSubscribe(app);
   mountConfirm(app);
   mountUnsubscribe(app);
   mountSubscriptions(app);
-  mountMetrics(app);
 
-  app.get<unknown, routes.health.RouteResponse>(apiUrls.health, (req, res) => {
-    res.json({
-      success: true,
-      data: true,
-    });
-  });
-
-  app.use('/', swaggerUi.serve, swaggerUi.setup(null, {
-    customSiteTitle: 'GitHub Checker API',
-    swaggerOptions: {
-      url: '/swagger.yml',
+  app.get(apiUrls.health, {
+    schema: {
+      tags: [docTags.health.name],
+      summary: 'Health check',
+      response: routes.health.RouteResponse,
     },
-  }));
+  }, (req, res) => {
+    res.status(200).send(true);
+  });
 };

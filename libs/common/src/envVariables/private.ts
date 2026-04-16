@@ -9,9 +9,8 @@ const Envs = z.object({
   NODEMAILER_SENDER: customEmail,
   REDIS_CONNECTION_URL: customNonEmptyString,
 });
-type Envs = z.infer<typeof Envs>;
 
-let envs: Envs;
+let envs: z.infer<typeof Envs>;
 
 try {
   // eslint-disable-next-line no-process-env

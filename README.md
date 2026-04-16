@@ -67,5 +67,4 @@ exit
 - Instead of GitHub Action CI on push linter + tests configured linter + tests + types + some extra checks on Git pre-commit hook
 
 HTML page for subscribing to releases is here: <https://github-checker.arthurka.com>. \
-The app live status page can be found here: <https://up.arthurka.com/status/github-checker>. \
-Prometheus metrics are here: <https://github-checker.arthurka.com/metrics>.
+The app live status page can be found here: <https://up.arthurka.com/status/github-checker>.

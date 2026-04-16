@@ -1,38 +1,49 @@
-import express, { ErrorRequestHandler } from 'express';
-import cors from 'cors';
-import { createServer } from 'http';
-import cookieParser from 'cookie-parser';
-import { UnexpectedServerError } from '@repo/common/src/zod/apiResponseErrors';
-import path from 'path';
+import Fastify from 'fastify';
+import { serializerCompiler, validatorCompiler, ZodTypeProvider } from 'fastify-type-provider-zod';
+import { InputDataValidationError, UnexpectedServerError } from '@repo/common/src/zod/apiResponseErrors';
+import { FastifyErrorShape } from '@repo/common/src/zod/FastifyErrorShape';
 import { name } from '../package.json';
 import { mountRouter } from './router';
 
-export const initApp = () => {
-  const app = express();
-  const server = createServer(app);
+const app = Fastify().withTypeProvider<ZodTypeProvider>();
+export type App = typeof app;
 
-  app.use(cors({
-    origin: true,
-    credentials: true,
-  }));
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
-  app.use(cookieParser());
-  app.use(express.static(path.resolve('public')));
+export const initApp = async () => {
+  app.setValidatorCompiler(validatorCompiler);
+  app.setSerializerCompiler(serializerCompiler);
 
-  mountRouter(app);
+  await mountRouter(app);
 
-  // Warn: do not remove extra `next` param, for some weird reason in Express this works as unhandled errors handler
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  app.use(((err, req, res, next) => {
-    console.error('Something went wrong. |g7uw54|', err);
-    res.status(500).json({
-      success: false,
-      error: {
-        type: 'UnexpectedServerError',
-      } satisfies UnexpectedServerError,
-    });
-  }) satisfies ErrorRequestHandler);
+  app.setErrorHandler((e, req, res) => {
+    const { success, data } = FastifyErrorShape.safeParse(e);
+    if(success === true) {
+      switch(data.statusCode) {
+        case 400:
+          res.status(400).send({
+            type: 'InputDataValidationError',
+            description: data.message,
+          } satisfies InputDataValidationError);
+          break;
+        case 500:
+          console.error('Something went wrong. |g7uw54|', e);
+          res.status(500).send({
+            type: 'UnexpectedServerError',
+            description: data.message,
+          } satisfies UnexpectedServerError);
+          break;
+        default:
+          ((e: never) => e)(data.statusCode);
+          throw new Error('This should never happen. |k2v3kx|');
+      }
+      return;
+    }
+
+    console.error('Something went wrong. |n6575i|', e);
+    res.status(500).send({
+      type: 'UnexpectedServerError',
+    } satisfies UnexpectedServerError);
+  });
+
   process.on('unhandledRejection', (reason, promise) => {
     console.error('Something went wrong. |fw5xgm|', promise, JSON.stringify(reason, null, 2));
   });
@@ -41,7 +52,6 @@ export const initApp = () => {
   });
 
   const port = 3000;
-  server.listen(port, () => {
-    console.info(`${name} is listening on localhost:${port}`);
-  });
+  await app.listen({ port });
+  console.info(`${name} is listening on localhost:${port}`);
 };
