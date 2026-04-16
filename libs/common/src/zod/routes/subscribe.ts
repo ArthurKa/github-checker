@@ -10,10 +10,14 @@ export const ReqBody = (
       repoName: customRepoName,
     })
     .describe('Subscription request')
-    .overwrite(({ repoName, ...rest }) => ({
-      ...rest,
-      repoName: RepoName(repoName.trim()),
-    }))
+    .transform((e): typeof e => {
+      const { repoName, ...rest } = e;
+
+      return {
+        ...rest,
+        repoName: RepoName(repoName.trim()),
+      };
+    })
 );
 export type ReqBody = z.infer<typeof ReqBody>;
 
