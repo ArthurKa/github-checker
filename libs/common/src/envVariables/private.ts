@@ -1,9 +1,9 @@
 import assert from 'assert';
 import { z, ZodError } from 'zod/v4';
-import { customEmail, customNonEmptyString, customNoTrailingSlashStringURL } from '../zod/customs';
+import { customBasicNoTrailingSlashStringURL, customEmail, customNonEmptyString } from '../zod/customs';
 
 const Envs = z.object({
-  MONGO_URL: customNoTrailingSlashStringURL,
+  MONGO_URL: customBasicNoTrailingSlashStringURL,
   GITHUB_API_TOKEN: customNonEmptyString,
   GOOGLE_APP_PASS: customNonEmptyString,
   NODEMAILER_SENDER: customEmail,

@@ -24,7 +24,7 @@ fi
   npx eslint --ext js,jsx,ts,tsx --max-warnings=0 helpers .eslintrc.js &&
   npm run lint --ws &&
   npm run ts:noWatch --ws &&
-  npm run test:noWatch --ws &&
+  npm run test:noWatch &&
   true
 ) || (stashPop && false)
 stashPop

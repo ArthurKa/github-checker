@@ -1,12 +1,12 @@
 import { isNull } from '@arthurka/ts-utils';
-import { NoTrailingSlashStringURL } from '@repo/common/src/brands';
+import { StringURL } from '@repo/common/src/brands';
 import { GitHubApiResp } from '@repo/common/src/types';
 import { redisService } from '../../../redisService';
 import { handleGitHubApiRespErrors } from '.';
 
-export const makeGitHubApiRequestWithCache = async (
-  url: NoTrailingSlashStringURL,
-  makeRequest: (url: NoTrailingSlashStringURL) => Promise<Response>,
+export const makeGitHubApiRequestWithCache = async <T extends StringURL>(
+  url: T,
+  makeRequest: (url: T) => Promise<Response>,
 ): Promise<GitHubApiResp<string>> => {
   const cached = await redisService.githubApiCache.get(url);
   if(!isNull(cached)) {

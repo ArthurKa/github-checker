@@ -1,4 +1,4 @@
-import { NoTrailingSlashStringURL, RepoId, RepoName } from '@repo/common/src/brands';
+import { RepoId, RepoName, StringURL } from '@repo/common/src/brands';
 import assert from 'assert';
 import { RepoReleases } from '@repo/common/src/zod/github';
 import { GitHubApiResp } from '@repo/common/src/types';
@@ -8,7 +8,7 @@ import { githubApiUrls } from './githubApiUrls';
 import { makeGitHubApiRequestWithCache } from './common/makeGitHubApiRequestWithCache';
 import { redisService } from '../../redisService';
 
-const handleResp = async (url: NoTrailingSlashStringURL): Promise<GitHubApiResp<RepoReleases[number] | null>> => {
+const handleResp = async (url: StringURL): Promise<GitHubApiResp<RepoReleases[number] | null>> => {
   const res = await makeGitHubApiRequestWithCache(url, url => githubFetchHelper.get(url));
   if(res.success === false) {
     return res;

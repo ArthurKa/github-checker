@@ -1,10 +1,10 @@
 import assert from 'assert';
 import { z, ZodError } from 'zod/v4';
-import { customNoTrailingSlashStringURL } from '../zod/customs';
+import { customBasicNoTrailingSlashStringURL } from '../zod/customs';
 
 const Envs = z.object({
   NODE_ENV: z.enum(['production', 'development']),
-  API_URL: customNoTrailingSlashStringURL,
+  API_URL: customBasicNoTrailingSlashStringURL,
 });
 
 let envs: z.infer<typeof Envs>;

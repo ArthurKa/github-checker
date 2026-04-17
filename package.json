@@ -6,6 +6,8 @@
     "prune": "rm -rf node_modules && npm run prune:sub && npm run prune:build",
     "prune:sub": "rm -rf {apps,libs}/*/node_modules",
     "prune:build": "rm -rf {apps,libs}/*/dist",
+    "test": "vitest",
+    "test:noWatch": "npm run test -- run",
     "api:dev": "npm run start-checks && npm run dev -w apps/api",
     "api:mongodump": "npm run mongodump -w apps/api",
     "api:mongorestore": "npm run mongorestore -w apps/api",
@@ -24,7 +26,8 @@
     "@tsconfig/node18-strictest": "1.0.0",
     "@types/semver": "7.7.1",
     "husky": "8.0.3",
-    "semver": "7.7.2"
+    "semver": "7.7.2",
+    "vitest": "4.1.4"
   },
   "workspaces": [
     "apps/*",
