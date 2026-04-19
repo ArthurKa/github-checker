@@ -1,7 +1,7 @@
 import Fastify from 'fastify';
 import { serializerCompiler, validatorCompiler, ZodTypeProvider } from 'fastify-type-provider-zod';
-import { InputDataValidationError, UnexpectedServerError } from '@repo/common/src/zod/apiResponseErrors';
-import { FastifyErrorShape } from '@repo/common/src/zod/FastifyErrorShape';
+import { InputDataValidationError, UnexpectedServerError } from '@repo/common/src/schemas/apiResponseErrors';
+import { FastifyErrorShape } from '@repo/common/src/schemas/FastifyErrorShape';
 import { name } from '../package.json';
 import { mountRouter } from './router';
 

@@ -21,7 +21,6 @@ const isCheckMode = process.argv.includes('--check');
   require('./modify-Ionic-useIonViewWill_Did_Enter_Leave-typings'),
   require('./modify-Ionic-AlertButton-handler-typings'),
   require('./modify-react-ErrorBoundary-typings'),
-  require('./modify-Zod-v4-custom'),
   require('./modify-total-typescript-ts-reset'),
   require('./modify-Vitest-toEqual-typings'),
   require('./modify-Vitest-toStrictEqual-typings'),

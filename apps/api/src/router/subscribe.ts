@@ -1,7 +1,7 @@
-import { routes } from '@repo/common/src/zod';
+import { routes } from '@repo/common/src/schemas';
 import { apiUrls } from '@repo/common/src/commonUrls';
 import { isNull } from '@arthurka/ts-utils';
-import { generateUUID } from '@repo/common/src/utils';
+import { generateUUID, validateResHeaders } from '@repo/common/src/utils';
 import { SubscribeToken } from '@repo/common/src/brands';
 import { subscriptionService } from '../services/db/subscriptionService';
 import { getRepoByRepoName } from '../services/fetch/github/getRepoByRepoName';
@@ -22,6 +22,7 @@ export const mountSubscribe = (app: App) => {
       body: routes.subscribe.ReqBody,
       response: routes.subscribe.RouteResponse,
     },
+    onSend: validateResHeaders(routes.subscribe.ResHeaders),
   }, async (req, res) => {
     const [githubRepo, repoLatestRelease] = await Promise.all([
       getRepoByRepoName(req.body.repoName),
@@ -30,7 +31,7 @@ export const mountSubscribe = (app: App) => {
     if(githubRepo.success === false) {
       switch(githubRepo.error) {
         case 503:
-          res.header('Retry-After', githubRepo.retryAfter.toString());
+          res.header('retry-after', githubRepo.retryAfter.toString());
           res.status(503).send({
             type: 'GitHubLimitExceeded',
           });
@@ -50,7 +51,7 @@ export const mountSubscribe = (app: App) => {
     if(repoLatestRelease.success === false) {
       switch(repoLatestRelease.error) {
         case 503:
-          res.header('Retry-After', repoLatestRelease.retryAfter.toString());
+          res.header('retry-after', repoLatestRelease.retryAfter.toString());
           res.status(503).send({
             type: 'GitHubLimitExceeded',
           });

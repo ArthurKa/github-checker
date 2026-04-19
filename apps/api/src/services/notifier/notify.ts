@@ -10,9 +10,9 @@ const ntfy = async (message: string, openUrl?: string) => {
     method: 'POST',
     body: message,
     headers: {
-      Title: 'GitHub Checker',
+      title: 'GitHub Checker',
       ...!isUndefined(openUrl) && {
-        Actions: `view, Open repo, ${openUrl}`,
+        actions: `view, Open repo, ${openUrl}`,
       },
     },
   });

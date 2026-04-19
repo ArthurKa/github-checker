@@ -21,7 +21,7 @@ export const mountRouter = async (app: App) => {
       hide: true,
     },
   }, (req, res) => {
-    res.header('Content-Type', 'text/html');
+    res.header('content-type', 'text/html');
     res.status(200).send(
       trimMultiline`
         <a href="${apiUrls.docs.swagger}">Swagger docs</a>

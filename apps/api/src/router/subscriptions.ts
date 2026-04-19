@@ -1,4 +1,4 @@
-import { routes } from '@repo/common/src/zod';
+import { routes } from '@repo/common/src/schemas';
 import { apiUrls } from '@repo/common/src/commonUrls';
 import { getNotUndefined } from '@arthurka/ts-utils';
 import { subscriptionService } from '../services/db/subscriptionService';

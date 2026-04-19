@@ -1,5 +1,5 @@
 import { typeOf } from '@arthurka/ts-utils';
-import { Email, isEmail, isReleaseTag, isRepoId, isRepoName, isSubscribeToken, isUnsubscribeToken, isUUID, ReleaseTag, RepoId, RepoName, SubscribeToken, UnsubscribeToken, UUID } from '../brands';
+import { Email, IntegerSecond, isEmail, isIntegerSecond, isReleaseTag, isRepoId, isRepoName, isSubscribeToken, isUnsubscribeToken, isUUID, ReleaseTag, RepoId, RepoName, SubscribeToken, UnsubscribeToken, UUID } from '../brands';
 import { BasicNoTrailingSlashStringURL, isBasicNoTrailingSlashStringURL, isNonEmptyString, NonEmptyString } from '../brands/string/common';
 
 const makeCustomErrorMessage = (name: string) => ({
@@ -13,6 +13,7 @@ export const customBasicNoTrailingSlashStringURL = BasicNoTrailingSlashStringURL
 export const customUUID = UUID.schema.refine(isUUID, makeCustomErrorMessage('UUID')).meta({
   example: UUID('fa2eda39-ef39-417f-8660-f560c14afefb'),
 });
+export const customIntegerSecond = IntegerSecond.schema.refine(isIntegerSecond, makeCustomErrorMessage('IntegerSecond'));
 
 export const customRepoName = RepoName.schema.refine(isRepoName, makeCustomErrorMessage('RepoName')).meta({
   example: RepoName('facebook/react'),

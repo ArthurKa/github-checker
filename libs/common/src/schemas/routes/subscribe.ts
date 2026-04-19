@@ -1,6 +1,6 @@
 import { z } from 'zod/v4';
 import { AlreadySubscribed, eachApiRoute, GitHubLimitExceeded, inputDataValidationError, RepoNotFound } from '../apiResponseErrors';
-import { customEmail, customRepoName } from '../customs';
+import { customEmail, customIntegerSecond, customRepoName } from '../customs';
 import { RepoName } from '../../brands';
 
 export const ReqBody = (
@@ -30,3 +30,10 @@ export const RouteResponse = {
   409: AlreadySubscribed.describe('Email already subscribed to this repository.'),
 };
 export type RouteResponse = z.infer<z.ZodObject<typeof RouteResponse>>;
+
+export const ResHeaders = {
+  503: z.object({
+    'retry-after': z.string().transform(Number).pipe(customIntegerSecond),
+  }),
+};
+export type ResHeaders = z.infer<z.ZodObject<typeof ResHeaders>>;

@@ -1,5 +1,5 @@
 import { RepoName } from '@repo/common/src/brands';
-import { Repo } from '@repo/common/src/zod/github';
+import { Repo } from '@repo/common/src/schemas/github';
 import assert from 'assert';
 import { GitHubApiResp } from '@repo/common/src/types';
 import { githubFetchHelper } from './common/fetchHelper';

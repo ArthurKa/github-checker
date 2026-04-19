@@ -1,4 +1,4 @@
-import { routes } from '@repo/common/src/zod';
+import { routes } from '@repo/common/src/schemas';
 import { apiUrls } from '@repo/common/src/commonUrls';
 import type { App } from '../app';
 import { docTags } from '../docTags';

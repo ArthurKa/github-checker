@@ -4,8 +4,8 @@ import { apiUrls } from '@repo/common/src/commonUrls';
 import { GOOGLE_APP_PASS, NODEMAILER_SENDER } from '@repo/common/src/envVariables/private';
 import { API_URL } from '@repo/common/src/envVariables/public';
 import { stringifyUrl } from '@repo/common/src/utils';
-import { routes } from '@repo/common/src/zod';
-import { RepoReleases } from '@repo/common/src/zod/github';
+import { routes } from '@repo/common/src/schemas';
+import { RepoReleases } from '@repo/common/src/schemas/github';
 import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({

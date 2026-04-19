@@ -1,6 +1,6 @@
 import assert from 'assert';
 import { z, ZodError } from 'zod/v4';
-import { customBasicNoTrailingSlashStringURL, customEmail, customNonEmptyString } from '../zod/customs';
+import { customBasicNoTrailingSlashStringURL, customEmail, customNonEmptyString } from '../schemas/customs';
 
 const Envs = z.object({
   MONGO_URL: customBasicNoTrailingSlashStringURL,

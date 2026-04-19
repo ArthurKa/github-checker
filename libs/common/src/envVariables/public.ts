@@ -1,6 +1,6 @@
 import assert from 'assert';
 import { z, ZodError } from 'zod/v4';
-import { customBasicNoTrailingSlashStringURL } from '../zod/customs';
+import { customBasicNoTrailingSlashStringURL } from '../schemas/customs';
 
 const Envs = z.object({
   NODE_ENV: z.enum(['production', 'development']),

@@ -21,6 +21,7 @@
     "@types/assert": "1.5.11",
     "@types/node": "22.15.3",
     "fast-check": "4.7.0",
+    "fastify": "5.8.4",
     "typescript": "5.8.3",
     "vitest": "4.1.4"
   }

@@ -1,6 +1,6 @@
 import { RepoId, RepoName, StringURL } from '@repo/common/src/brands';
 import assert from 'assert';
-import { RepoReleases } from '@repo/common/src/zod/github';
+import { RepoReleases } from '@repo/common/src/schemas/github';
 import { GitHubApiResp } from '@repo/common/src/types';
 import { isNull, isUndefined } from '@arthurka/ts-utils';
 import { githubFetchHelper } from './common/fetchHelper';
