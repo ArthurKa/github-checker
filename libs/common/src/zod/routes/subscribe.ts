@@ -9,7 +9,7 @@ export const ReqBody = (
       email: customEmail,
       repoName: customRepoName,
     })
-    .describe('Subscription request')
+    .describe('Subscription request.')
     .transform((e): typeof e => {
       const { repoName, ...rest } = e;
 
@@ -25,8 +25,8 @@ export const RouteResponse = {
   ...eachApiRoute,
   ...inputDataValidationError('body/email "bad-email.com" of type String is not valid Email, body/repo "react" of type String is not valid RepoName'),
   201: z.literal(true).describe('Subscription successful. Confirmation email sent.'),
-  503: GitHubLimitExceeded.describe('GitHub API requests limit exceeded'),
-  404: RepoNotFound.describe('Repository not found on GitHub'),
-  409: AlreadySubscribed.describe('Email already subscribed to this repository'),
+  503: GitHubLimitExceeded.describe('GitHub API requests limit exceeded.'),
+  404: RepoNotFound.describe('Repository not found on GitHub.'),
+  409: AlreadySubscribed.describe('Email already subscribed to this repository.'),
 };
 export type RouteResponse = z.infer<z.ZodObject<typeof RouteResponse>>;

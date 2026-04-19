@@ -1,14 +1,16 @@
 import swagger from '@fastify/swagger';
 import swaggerUI from '@fastify/swagger-ui';
+import scalarUI from '@scalar/fastify-api-reference';
 import { jsonSchemaTransform } from 'fastify-type-provider-zod';
 import { ObjValues, trimMultiline } from '@arthurka/ts-utils';
-import { API_URL } from '@repo/common/src/envVariables/public';
+import { API_URL, NODE_ENV } from '@repo/common/src/envVariables/public';
 import { OpenAPIV3 } from 'openapi-types';
+import { apiUrls } from '@repo/common/src/commonUrls';
 import type { App } from '../app';
 import { docTags } from '../docTags';
 import { apiVersion } from '../apiVersion';
 
-export const mountSwaggerDocs = async (app: App) => {
+export const mountDocs = async (app: App) => {
   await app.register(swagger, {
     transform: jsonSchemaTransform,
     openapi: {
@@ -27,8 +29,18 @@ export const mountSwaggerDocs = async (app: App) => {
     },
   });
 
+  await app.register(scalarUI, {
+    routePrefix: apiUrls.docs.scalar,
+    configuration: {
+      pageTitle: 'GitHub Checker API',
+      theme: 'fastify',
+      defaultOpenAllTags: true,
+      hideClientButton: true,
+      showDeveloperTools: NODE_ENV === 'production' ? 'never' : 'always',
+    },
+  });
   await app.register(swaggerUI, {
-    routePrefix: '/docs',
+    routePrefix: apiUrls.docs.swagger,
     uiConfig: {
       displayRequestDuration: true,
     },

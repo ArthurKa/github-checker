@@ -4,7 +4,7 @@ import { customEmail, customRepoId, customRepoName, customUUID } from './customs
 const UnexpectedServerError = z.object({
   type: z.literal('UnexpectedServerError'),
   description: z.string().optional().meta({ example: "Response doesn't match the schema" }),
-}).describe('Something went wrong');
+}).describe('Something went wrong.');
 export type UnexpectedServerError = z.infer<typeof UnexpectedServerError>;
 
 export const eachApiRoute = {
@@ -15,7 +15,7 @@ const InputDataValidationError = (example: string) => (
   z.object({
     type: z.literal('InputDataValidationError'),
     description: z.string().meta({ example }),
-  }).describe('Input data validation error')
+  }).describe('Input data validation error.')
 );
 export type InputDataValidationError = z.infer<ReturnType<typeof InputDataValidationError>>;
 

@@ -1,27 +1,41 @@
+import { trimMultiline } from '@arthurka/ts-utils';
 import { apiUrls } from '@repo/common/src/commonUrls';
-import { routes } from '@repo/common/src/zod';
+import type { App } from '../app';
 import { mountSubscribe } from './subscribe';
 import { mountConfirm } from './confirm';
 import { mountSubscriptions } from './subscriptions';
 import { mountUnsubscribe } from './unsubscribe';
-import type { App } from '../app';
-import { mountSwaggerDocs } from './swaggerDocs';
-import { docTags } from '../docTags';
+import { mountDocs } from './docs';
+import { mountHealth } from './health';
 
 export const mountRouter = async (app: App) => {
-  await mountSwaggerDocs(app);
+  await mountDocs(app);
   mountSubscribe(app);
   mountConfirm(app);
   mountUnsubscribe(app);
   mountSubscriptions(app);
+  mountHealth(app);
 
-  app.get(apiUrls.health, {
+  app.get('/', {
     schema: {
-      tags: [docTags.health.name],
-      summary: 'Health check',
-      response: routes.health.RouteResponse,
+      hide: true,
     },
   }, (req, res) => {
-    res.status(200).send(true);
+    res.header('Content-Type', 'text/html');
+    res.status(200).send(
+      trimMultiline`
+        <a href="${apiUrls.docs.swagger}">Swagger docs</a>
+        <br>
+        <a href="${apiUrls.docs.scalar}">Scalar docs</a>
+      `,
+    );
+  });
+
+  app.get(apiUrls.docs._, {
+    schema: {
+      hide: true,
+    },
+  }, (req, res) => {
+    res.status(307).redirect('/');
   });
 };
