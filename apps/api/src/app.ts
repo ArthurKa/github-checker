@@ -52,6 +52,6 @@ export const initApp = async () => {
   });
 
   const port = 3000;
-  await app.listen({ port });
+  await app.listen({ port, host: '0.0.0.0' });
   console.info(`${name} is listening on localhost:${port}`);
 };
