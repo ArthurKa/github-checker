@@ -63,8 +63,5 @@ exit
 - If repo is renamed the app also updates this info
 - The latest repo release for the app is the first element from array by `/releases` GitHub API, not `/releases/latest`
 - Release tag is tracked only by `tag_name` property and only the latest one so the app will detect any renaming, unpublish, etc as latest tag change and will send an email notification
-- I don't see `429 Too Many Requests` from GitHub as it's specified in the requirement so the app handles only `403 Forbidden` the real GitHub response for this case
-- Instead of GitHub Action CI on push linter + tests configured linter + tests + types + some extra checks on Git pre-commit hook
 
-HTML page for subscribing to releases is here: <https://github-checker.arthurka.com>. \
 The app live status page can be found here: <https://up.arthurka.com/status/github-checker>.
