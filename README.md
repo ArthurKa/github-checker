@@ -4,7 +4,7 @@
 
 0. Preinstalls:
     - on Windows recommended to do once and forget for ever `git config --global core.autocrlf false` (or `git config core.autocrlf false` after `1. git clone` if you don't want to configure it once globally).
-    - install ESLint VS Code extension (https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+    - install ESLint VS Code extension (<https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint>)
     - make sure VS Code is using correct TypeScript version from `node_modules` local folder and not globally installed version
 1. Clone this repo.
 2. Switch Node version to the one specified in `.nvmrc` file.
@@ -46,7 +46,7 @@ npm run api:dev
 ```bash
 cd ~/github-checker &&
 git checkout master &&
-git fetch &&
+git fetch -f &&
 git reset --hard origin/master &&
 ./do prodBuild &&
 ./do prodUp &&
