@@ -3,7 +3,7 @@ import { z, ZodError } from 'zod/v4';
 import { customBasicNoTrailingSlashStringURL } from '../schemas/customs';
 
 const Envs = z.object({
-  NODE_ENV: z.enum(['production', 'development']),
+  NODE_ENV: z.enum(['production', 'development', 'testing']),
   API_URL: customBasicNoTrailingSlashStringURL,
 });
 

@@ -4,6 +4,10 @@ import { NODE_ENV } from '@repo/common/src/envVariables/public';
 import Redis from 'ioredis';
 import crypto from 'crypto';
 
+export const redisNamespaceKeys = {
+  githubApiCache: 'githubApiCache',
+} as const satisfies Record<keyof typeof redisService, string>;
+
 const redis = new Redis(REDIS_CONNECTION_URL);
 
 const makeRedisKey = (_e: string) => {
@@ -24,13 +28,13 @@ const makeRedisKey = (_e: string) => {
 export const redisService = {
   githubApiCache: {
     get(url: StringURL) {
-      return redis.get(`githubApiCache:${makeRedisKey(url)}`);
+      return redis.get(`${redisNamespaceKeys.githubApiCache}:${makeRedisKey(url)}`);
     },
     async set(url: StringURL, value: string) {
-      await redis.set(`githubApiCache:${makeRedisKey(url)}`, value, 'EX', NODE_ENV === 'production' ? 10 * 60 : 30);
+      await redis.set(`${redisNamespaceKeys.githubApiCache}:${makeRedisKey(url)}`, value, 'EX', NODE_ENV === 'development' ? 30 : 10 * 60);
     },
     async setIfNotExists(url: StringURL, value: string) {
-      await redis.set(`githubApiCache:${makeRedisKey(url)}`, value, 'EX', NODE_ENV === 'production' ? 10 * 60 : 30, 'NX');
+      await redis.set(`${redisNamespaceKeys.githubApiCache}:${makeRedisKey(url)}`, value, 'EX', NODE_ENV === 'development' ? 30 : 10 * 60, 'NX');
     },
   },
 };

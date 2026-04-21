@@ -11,6 +11,6 @@ export const mountHealth = (app: App) => {
       response: routes.health.RouteResponse,
     },
   }, (req, res) => {
-    res.status(200).send(true);
+    res.status(200).send({ ok: true });
   });
 };

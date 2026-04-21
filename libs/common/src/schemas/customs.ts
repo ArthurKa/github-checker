@@ -1,6 +1,6 @@
 import { typeOf } from '@arthurka/ts-utils';
 import { Email, IntegerSecond, isEmail, isIntegerSecond, isReleaseTag, isRepoId, isRepoName, isSubscribeToken, isUnsubscribeToken, isUUID, ReleaseTag, RepoId, RepoName, SubscribeToken, UnsubscribeToken, UUID } from '../brands';
-import { BasicNoTrailingSlashStringURL, isBasicNoTrailingSlashStringURL, isNonEmptyString, NonEmptyString } from '../brands/string/common';
+import { BasicNoTrailingSlashStringURL, isBasicNoTrailingSlashStringURL, isNonEmptyString, isStringURL, NonEmptyString, StringURL } from '../brands/string/common';
 
 const makeCustomErrorMessage = (name: string) => ({
   error({ input }: { input: unknown }) {
@@ -9,6 +9,7 @@ const makeCustomErrorMessage = (name: string) => ({
 });
 
 export const customNonEmptyString = NonEmptyString.schema.refine(isNonEmptyString, makeCustomErrorMessage('NonEmptyString'));
+export const customStringURL = StringURL.schema.refine(isStringURL, makeCustomErrorMessage('BasicNoTrailingSlashStringURL'));
 export const customBasicNoTrailingSlashStringURL = BasicNoTrailingSlashStringURL.schema.refine(isBasicNoTrailingSlashStringURL, makeCustomErrorMessage('BasicNoTrailingSlashStringURL'));
 export const customUUID = UUID.schema.refine(isUUID, makeCustomErrorMessage('UUID')).meta({
   example: UUID('fa2eda39-ef39-417f-8660-f560c14afefb'),

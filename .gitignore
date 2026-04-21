@@ -6,5 +6,5 @@ prod-build
 mkcert
 certbot-secrets
 db-data
-redis-data
+redis-data*
 .DS_Store

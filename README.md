@@ -9,7 +9,7 @@
 1. Clone this repo.
 2. Switch Node version to the one specified in `.nvmrc` file.
 3. `npm ci` to install all dependencies.
-4. Put `.env` file in the root of the project.
+4. Put `.env` file with `.env.defaults` overrides in the root of the project if needed.
 5. `./do devUp` to run project dependencies.
 
 ### Certificates
@@ -30,6 +30,14 @@ mkcert \
 ```bash
 npm run api:dev
 ```
+
+## Nice to know
+
+### `.env` files structure
+
+`.env.defaults` file goes with Git and contains full list of env variables with their valid default values. \
+`.env` file is Git-ignored and contains local env overrides applied on `.env.defaults` in dev mode. \
+`.env.test` file goes with Git and contains overrides applied on `.env.defaults` in testing mode.
 
 ## Entrypoints
 

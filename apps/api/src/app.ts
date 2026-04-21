@@ -2,13 +2,14 @@ import Fastify from 'fastify';
 import { serializerCompiler, validatorCompiler, ZodTypeProvider } from 'fastify-type-provider-zod';
 import { InputDataValidationError, UnexpectedServerError } from '@repo/common/src/schemas/apiResponseErrors';
 import { FastifyErrorShape } from '@repo/common/src/schemas/FastifyErrorShape';
+import { processEnvFlags } from '@repo/common/src/utils/processEnvFlags';
 import { name } from '../package.json';
 import { mountRouter } from './router';
 
-const app = Fastify().withTypeProvider<ZodTypeProvider>();
-export type App = typeof app;
+export type App = Awaited<ReturnType<typeof createApp>>;
+export const createApp = async () => {
+  const app = Fastify().withTypeProvider<ZodTypeProvider>();
 
-export const initApp = async () => {
   app.setValidatorCompiler(validatorCompiler);
   app.setSerializerCompiler(serializerCompiler);
 
@@ -38,18 +39,34 @@ export const initApp = async () => {
       return;
     }
 
-    console.error('Something went wrong. |n6575i|', e);
+    if(!processEnvFlags.muteOnceApiLogError500.isOn()) {
+      processEnvFlags.muteOnceApiLogError500.off();
+      console.error('Something went wrong. |n6575i|', e);
+    }
     res.status(500).send({
       type: 'UnexpectedServerError',
     } satisfies UnexpectedServerError);
   });
 
-  process.on('unhandledRejection', (reason, promise) => {
+  const unhandledRejection = (reason: unknown, promise: Promise<unknown>) => {
     console.error('Something went wrong. |fw5xgm|', promise, JSON.stringify(reason, null, 2));
-  });
-  process.on('uncaughtException', (err, errOrigin) => {
+  };
+  const uncaughtException = (err: Error, errOrigin: NodeJS.UncaughtExceptionOrigin) => {
     console.error('Something went wrong. |03mi29|', err, errOrigin);
+  };
+  process.on('unhandledRejection', unhandledRejection);
+  process.on('uncaughtException', uncaughtException);
+
+  app.addHook('onClose', () => {
+    process.off('unhandledRejection', unhandledRejection);
+    process.off('uncaughtException', uncaughtException);
   });
+
+  return app;
+};
+
+export const initApp = async () => {
+  const app = await createApp();
 
   const port = 3000;
   await app.listen({ port, host: '0.0.0.0' });

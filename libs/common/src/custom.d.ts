@@ -5,6 +5,12 @@ declare class NoIntersectionError<T, U> {
 }
 
 declare global {
+  namespace NodeJS {
+    interface ProcessEnv {
+      muteOnceApiLogError500?: 'true';
+    }
+  }
+
   interface ReadonlyArray<T> {
     includes<U extends T>(
       searchElement: T extends { [WITNESS]: unknown } ? T : [U & T] extends [never] ? NoIntersectionError<T, U> : TSReset.WidenLiteral<U>,

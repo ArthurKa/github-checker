@@ -25,6 +25,8 @@ const isCheckMode = process.argv.includes('--check');
   require('./modify-Vitest-toEqual-typings'),
   require('./modify-Vitest-toStrictEqual-typings'),
   require('./modify-Vitest-toBe-typings'),
+  require('./modify-Vitest-toMatchObject-typings'),
+  require('./modify-Vitest-spy-fn-typings'),
   /* eslint-enable global-require */
 ].forEach(f => {
   let result;

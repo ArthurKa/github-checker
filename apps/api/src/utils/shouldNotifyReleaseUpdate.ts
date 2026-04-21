@@ -1,6 +1,6 @@
 import { isNull } from '@arthurka/ts-utils';
 import { StrictExclude } from '@repo/common/src/utils';
-import type { DbRepo } from '../services/db/repoService';
+import { DbRepo } from '../services/db/repoService';
 
 export const shouldNotifyReleaseUpdate = (
   repo: null | Pick<DbRepo, 'latestTag'>,

@@ -79,6 +79,16 @@ services:
     ports:
       - 127.0.0.1:6379:6379
 
+  redis-test:
+    <<: *redis
+    profiles:
+      - test
+    container_name: github-checker_redis-test
+    volumes:
+      - ./redis-data-test:/data
+    ports:
+      - 127.0.0.1:6380:6379
+
   nginx-certbot:
     networks:
       - github-checker

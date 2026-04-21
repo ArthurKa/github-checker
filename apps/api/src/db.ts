@@ -4,6 +4,8 @@ import { config, up } from 'migrate-mongo';
 import { MONGO_URL } from '@repo/common/src/envVariables/private';
 import path from 'path';
 import assert from 'assert';
+import { NODE_ENV } from '@repo/common/src/envVariables/public';
+import { generateUUID } from '@repo/common/src/utils';
 
 let _db: Db | null = null;
 let _client: MongoClient | null = null;
@@ -21,12 +23,13 @@ export const client = () => {
 };
 
 export const initDb = async () => {
-  _client = await new MongoClient(MONGO_URL).connect();
+  const mongoUrl = NODE_ENV !== 'testing' ? MONGO_URL : `${MONGO_URL}-${generateUUID()}`;
+  _client = await new MongoClient(mongoUrl).connect();
   _db = _client.db();
 
   config.set({
     mongodb: {
-      url: MONGO_URL,
+      url: mongoUrl,
       options: {
         // @ts-expect-error
         useNewUrlParser: true,
@@ -41,6 +44,8 @@ export const initDb = async () => {
   });
 
   for(const fileName of await up(_db, _client)) {
-    console.info(`Migrated: ${fileName}`);
+    if(NODE_ENV !== 'testing') {
+      console.info(`Migrated: ${fileName}`);
+    }
   }
 };

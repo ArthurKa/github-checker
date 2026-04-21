@@ -4,7 +4,7 @@ import assert from 'assert';
 import { isNull, Union } from '@arthurka/ts-utils';
 import { generateUUID, SafeOmit } from '@repo/common/src/utils';
 import { db } from '../../db';
-import type { DbRepo } from './repoService';
+import { DbRepo } from './repoService';
 
 export type DbSubscription = {
   email: Email;

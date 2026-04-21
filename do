@@ -6,10 +6,16 @@ source <(grep '^alias ' ~/.bashrc)
 set -e
 
 devUp() {
-  dc --profile dev up -d
+  dc --env-file .env.defaults --env-file .env --profile dev up -d
 }
 devDown() {
-  dc --profile dev down
+  dc --env-file .env.defaults --env-file .env --profile dev down
+}
+testUp() {
+  dc --env-file .env.defaults --env-file .env.test --profile test up -d
+}
+testDown() {
+  dc --env-file .env.defaults --env-file .env.test --profile test down
 }
 devRestart() {
   ./do devDown
