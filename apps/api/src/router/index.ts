@@ -31,11 +31,13 @@ export const mountRouter = async (app: App) => {
     );
   });
 
-  app.get(apiUrls.docs._, {
-    schema: {
-      hide: true,
-    },
-  }, (req, res) => {
-    res.status(307).redirect('/');
-  });
+  for(const url of [apiUrls.docs._, `${apiUrls.docs._}/`]) {
+    app.get(url, {
+      schema: {
+        hide: true,
+      },
+    }, (req, res) => {
+      res.status(307).redirect('/');
+    });
+  }
 };
