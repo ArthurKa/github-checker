@@ -24,14 +24,14 @@ beforeAll(async () => {
   await app.ready();
 });
 afterAll(async () => {
-  assert(!isNull(app), 'Something went wrong. |s9x9kn|');
+  assert(!isNull(app));
 
   await db().dropDatabase();
   await app.close();
 });
 beforeEach(async () => {
-  assert(!isNull(subscriptionCollection), 'Something went wrong. |2g5m2z|');
-  assert(!isNull(repoCollection), 'Something went wrong. |96j2yc|');
+  assert(!isNull(subscriptionCollection));
+  assert(!isNull(repoCollection));
 
   await subscriptionCollection.deleteMany();
   await repoCollection.deleteMany();
@@ -39,7 +39,7 @@ beforeEach(async () => {
 
 describe('GET /subscriptions', () => {
   it('returns empty array when no subscriptions exist', async () => {
-    assert(!isNull(app), 'Something went wrong. |oqi21p|');
+    assert(!isNull(app));
 
     const res = await app.inject({
       method: 'GET',
@@ -53,9 +53,9 @@ describe('GET /subscriptions', () => {
   });
 
   it('returns subscriptions with repo info', async () => {
-    assert(!isNull(app), 'Something went wrong. |3a61if|');
-    assert(!isNull(subscriptionCollection), 'Something went wrong. |nj8zb5|');
-    assert(!isNull(repoCollection), 'Something went wrong. |cn4x3m|');
+    assert(!isNull(app));
+    assert(!isNull(subscriptionCollection));
+    assert(!isNull(repoCollection));
 
     const repoId = RepoId(123);
     const repoName = RepoName('owner/repo');
@@ -98,8 +98,8 @@ describe('GET /subscriptions', () => {
   });
 
   it('fails when repo is missing (invalid data state)', async () => {
-    assert(!isNull(app), 'Something went wrong. |fk8s5c|');
-    assert(!isNull(subscriptionCollection), 'Something went wrong. |v9ps66|');
+    assert(!isNull(app));
+    assert(!isNull(subscriptionCollection));
 
     const email = Email('test@example.com');
 

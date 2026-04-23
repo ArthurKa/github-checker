@@ -20,21 +20,21 @@ beforeAll(async () => {
   await app.ready();
 });
 afterAll(async () => {
-  assert(!isNull(app), 'Something went wrong. |0rp4xs|');
+  assert(!isNull(app));
 
   await db().dropDatabase();
   await app.close();
 });
 beforeEach(async () => {
-  assert(!isNull(subscriptionCollection), 'Something went wrong. |b841a2|');
+  assert(!isNull(subscriptionCollection));
 
   await subscriptionCollection.deleteMany();
 });
 
 describe('GET /confirm', () => {
   it('confirms subscription successfully and marks it as confirmed', async () => {
-    assert(!isNull(app), 'Something went wrong. |r6xhx8|');
-    assert(!isNull(subscriptionCollection), 'Something went wrong. |yd8b04|');
+    assert(!isNull(app));
+    assert(!isNull(subscriptionCollection));
 
     const email = Email('test@example.com');
     const repoId = RepoId(123);
@@ -70,13 +70,13 @@ describe('GET /confirm', () => {
     });
 
     expect(confirmedRecord).not.toBeNull();
-    assert(!isNull(confirmedRecord), 'This should never happen. |8552jd|');
+    assert(!isNull(confirmedRecord));
 
     expect(confirmedRecord.confirmation.isConfirmed).toBe(isConfirmed === false);
   });
 
   it('returns 404 when token does not exist', async () => {
-    assert(!isNull(app), 'Something went wrong. |8eqf2b|');
+    assert(!isNull(app));
 
     const token = SubscribeToken(generateUUID());
 
@@ -93,8 +93,8 @@ describe('GET /confirm', () => {
   });
 
   it('second call returns 404 after successful confirm (idempotency)', async () => {
-    assert(!isNull(app), 'Something went wrong. |of1z56|');
-    assert(!isNull(subscriptionCollection), 'Something went wrong. |oxg8yb|');
+    assert(!isNull(app));
+    assert(!isNull(subscriptionCollection));
 
     const subscribeToken = SubscribeToken(generateUUID());
 
@@ -123,8 +123,8 @@ describe('GET /confirm', () => {
   });
 
   it('returns 404 when trying to confirm an already-confirmed subscription (unsubscribeToken provided)', async () => {
-    assert(!isNull(app), 'Something went wrong. |mup4vi|');
-    assert(!isNull(subscriptionCollection), 'Something went wrong. |8m04s0|');
+    assert(!isNull(app));
+    assert(!isNull(subscriptionCollection));
 
     const unsubscribeToken = UnsubscribeToken(generateUUID());
 
@@ -154,8 +154,8 @@ describe('GET /confirm', () => {
   });
 
   it('does not confirm subscription if confirm token accidentally matches unsubscribeToken', async () => {
-    assert(!isNull(app), 'Something went wrong. |nr2eq3|');
-    assert(!isNull(subscriptionCollection), 'Something went wrong. |0f325s|');
+    assert(!isNull(app));
+    assert(!isNull(subscriptionCollection));
 
     const isConfirmed = true;
     const unsubscribeToken = UnsubscribeToken(generateUUID());
@@ -181,13 +181,13 @@ describe('GET /confirm', () => {
     });
 
     expect(record).not.toBeNull();
-    assert(!isNull(record), 'This should never happen. |ex0jpx|');
+    assert(!isNull(record));
 
     expect(record.confirmation.isConfirmed).toBe(isConfirmed);
   });
 
   it('returns 400 when token format is invalid', async () => {
-    assert(!isNull(app), 'Something went wrong. |60fzu1|');
+    assert(!isNull(app));
 
     const res = await app.inject({
       method: 'GET',

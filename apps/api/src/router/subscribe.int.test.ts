@@ -79,17 +79,17 @@ beforeAll(async () => {
   await redis.flushdb();
 });
 afterAll(async () => {
-  assert(!isNull(app), 'Something went wrong. |vsb26y|');
-  assert(!isNull(redis), 'Something went wrong. |xt1ifg|');
+  assert(!isNull(app));
+  assert(!isNull(redis));
 
   await db().dropDatabase();
   await app.close();
   await redis.quit();
 });
 beforeEach(async () => {
-  assert(!isNull(subscriptionCollection), 'Something went wrong. |rv1uqu|');
-  assert(!isNull(repoCollection), 'Something went wrong. |3bj7ts|');
-  assert(!isNull(redis), 'Something went wrong. |2w3xxm|');
+  assert(!isNull(subscriptionCollection));
+  assert(!isNull(repoCollection));
+  assert(!isNull(redis));
 
   expect(await redis.keys(`${redisNamespaceKeys.githubApiCache}:*`)).toStrictEqual([]);
   await subscriptionCollection.deleteMany();
@@ -98,15 +98,15 @@ beforeEach(async () => {
   vi.resetAllMocks();
 });
 afterEach(async () => {
-  assert(!isNull(redis), 'Something went wrong. |xg4rxi|');
+  assert(!isNull(redis));
 
   expect(await redis.keys(`${redisNamespaceKeys.githubApiCache}:*`)).toStrictEqual([]);
 });
 
 describe('POST /subscribe', () => {
   it('creates unconfirmed subscription and sends confirmation email', async () => {
-    assert(!isNull(app), 'Something went wrong. |hof1fq|');
-    assert(!isNull(subscriptionCollection), 'Something went wrong. |4szc2m|');
+    assert(!isNull(app));
+    assert(!isNull(subscriptionCollection));
 
     const email = Email('test@example.com');
 
@@ -128,12 +128,12 @@ describe('POST /subscribe', () => {
     });
 
     expect(subscription).not.toBeNull();
-    assert(!isNull(subscription), 'This should never happen. |d2j0sc|');
+    assert(!isNull(subscription));
 
     expect(subscription.email).toBe(email);
     expect(subscription.repoId).toBe(MOCK_REPO_ID);
     expect(subscription.confirmation.isConfirmed).toBe(false);
-    assert(subscription.confirmation.isConfirmed === false, 'Something went wrong. |ia6wan|');
+    assert(subscription.confirmation.isConfirmed === false);
 
     expect(subscription.confirmation.subscribeToken).toBeTruthy();
 
@@ -150,8 +150,8 @@ describe('POST /subscribe', () => {
   });
 
   it('sends confirmation email even if unconfirmed subscription already exists', async () => {
-    assert(!isNull(app), 'Something went wrong. |1q5udv|');
-    assert(!isNull(subscriptionCollection), 'Something went wrong. |e4rb4k|');
+    assert(!isNull(app));
+    assert(!isNull(subscriptionCollection));
 
     const email = Email('test@example.com');
     const isConfirmed = false;
@@ -191,8 +191,8 @@ describe('POST /subscribe', () => {
         subscribeToken,
       },
     }]);
-    assert(isArrayLength(subscriptions, '===', 1), 'Something went wrong. |xe92jd|');
-    assert(subscriptions[0].confirmation.isConfirmed === isConfirmed, 'Something went wrong. |7yce3g|');
+    assert(isArrayLength(subscriptions, '===', 1));
+    assert(subscriptions[0].confirmation.isConfirmed === isConfirmed);
 
     expect(mocks.sendSubscriptionConfirmationMail).toHaveBeenCalledOnce();
     expect(mocks.sendSubscriptionConfirmationMail).toHaveBeenCalledWith<Parameters<typeof sendSubscriptionConfirmationMail>>({
@@ -207,8 +207,8 @@ describe('POST /subscribe', () => {
   });
 
   it('does not send email and returns 409 when subscription is already confirmed (isConfirmed: true)', async () => {
-    assert(!isNull(app), 'Something went wrong. |zr55ac|');
-    assert(!isNull(subscriptionCollection), 'Something went wrong. |tw40zf|');
+    assert(!isNull(app));
+    assert(!isNull(subscriptionCollection));
 
     const email = Email('test@example.com');
 
@@ -242,7 +242,7 @@ describe('POST /subscribe', () => {
   });
 
   it('returns 404 when GitHub repo is not found', async () => {
-    assert(!isNull(app), 'Something went wrong. |ncu9dd|');
+    assert(!isNull(app));
 
     mocks.getRepoByRepoName.mockResolvedValue({
       success: false,
@@ -268,7 +268,7 @@ describe('POST /subscribe', () => {
   });
 
   it('returns 500 when only GitHub repo release tag is not found', async () => {
-    assert(!isNull(app), 'Something went wrong. |iuu9ve|');
+    assert(!isNull(app));
 
     mocks.getRepoLatestReleaseByRepoName.mockResolvedValue({
       success: false,
@@ -295,7 +295,7 @@ describe('POST /subscribe', () => {
   });
 
   it('returns 503 with retry-after header when GitHub repo request hits rate limit', async () => {
-    assert(!isNull(app), 'Something went wrong. |w05vph|');
+    assert(!isNull(app));
 
     const retryAfter = IntegerSecond(60);
 
@@ -324,7 +324,7 @@ describe('POST /subscribe', () => {
   });
 
   it('returns 503 with retry-after header when GitHub repo release tag request hits rate limit', async () => {
-    assert(!isNull(app), 'Something went wrong. |7k80t7|');
+    assert(!isNull(app));
 
     const retryAfter = IntegerSecond(123);
 
@@ -353,7 +353,7 @@ describe('POST /subscribe', () => {
   });
 
   it('returns 400 when email is invalid', async () => {
-    assert(!isNull(app), 'Something went wrong. |rcu6pv|');
+    assert(!isNull(app));
 
     const res = await app.inject({
       method: 'POST',
@@ -373,7 +373,7 @@ describe('POST /subscribe', () => {
   });
 
   it('returns 400 when repoName is invalid', async () => {
-    assert(!isNull(app), 'Something went wrong. |rty3g7|');
+    assert(!isNull(app));
 
     const res = await app.inject({
       method: 'POST',
@@ -393,9 +393,9 @@ describe('POST /subscribe', () => {
   });
 
   it('trims whitespace from repoName before processing', async () => {
-    assert(!isNull(app), 'Something went wrong. |dpa1ip|');
-    assert(!isNull(subscriptionCollection), 'Something went wrong. |eu3hnx|');
-    assert(!isNull(repoCollection), 'Something went wrong. |ms3dyv|');
+    assert(!isNull(app));
+    assert(!isNull(subscriptionCollection));
+    assert(!isNull(repoCollection));
 
     const email = Email('test@example.com');
 
@@ -422,12 +422,12 @@ describe('POST /subscribe', () => {
     }).then(removeMongoId);
 
     expect(subscription).not.toBeNull();
-    assert(!isNull(subscription), 'This should never happen. |6ubc37|');
+    assert(!isNull(subscription));
 
     expect(subscription.email).toBe(email);
     expect(subscription.repoId).toBe(MOCK_REPO_ID);
     expect(subscription.confirmation.isConfirmed).toBe(false);
-    assert(subscription.confirmation.isConfirmed === false, 'Something went wrong. |ug332o|');
+    assert(subscription.confirmation.isConfirmed === false);
 
     expect(subscription.confirmation.subscribeToken).toBeTruthy();
 
@@ -450,8 +450,8 @@ describe('POST /subscribe', () => {
   });
 
   it('works when repo has no releases (latestTag: null)', async () => {
-    assert(!isNull(app), 'Something went wrong. |hb6c89|');
-    assert(!isNull(subscriptionCollection), 'Something went wrong. |a9v00p|');
+    assert(!isNull(app));
+    assert(!isNull(subscriptionCollection));
 
     const email = Email('test@example.com');
     const repoRelease = null;
@@ -484,8 +484,8 @@ describe('POST /subscribe', () => {
   });
 
   it('caches GitHub API fetched data', async () => {
-    assert(!isNull(app), 'Something went wrong. |5xm1v1|');
-    assert(!isNull(subscriptionCollection), 'Something went wrong. |zr5x82|');
+    assert(!isNull(app));
+    assert(!isNull(subscriptionCollection));
 
     const email = Email('test@example.com');
 
@@ -509,9 +509,9 @@ describe('POST /subscribe', () => {
   });
 
   it('sends notifications to all already subscribed emails if new release tag is out', async () => {
-    assert(!isNull(app), 'Something went wrong. |sm523g|');
-    assert(!isNull(subscriptionCollection), 'Something went wrong. |imc2sb|');
-    assert(!isNull(repoCollection), 'Something went wrong. |692dnn|');
+    assert(!isNull(app));
+    assert(!isNull(subscriptionCollection));
+    assert(!isNull(repoCollection));
 
     const latestTag = ReleaseTag('v1.2.3');
 
@@ -566,9 +566,9 @@ describe('POST /subscribe', () => {
   });
 
   it('sends notifications to all already subscribed emails if new release null', async () => {
-    assert(!isNull(app), 'Something went wrong. |wxy8s3|');
-    assert(!isNull(subscriptionCollection), 'Something went wrong. |3f0n6x|');
-    assert(!isNull(repoCollection), 'Something went wrong. |efp5ec|');
+    assert(!isNull(app));
+    assert(!isNull(subscriptionCollection));
+    assert(!isNull(repoCollection));
 
     const latestTag = ReleaseTag('v1.2.3');
 

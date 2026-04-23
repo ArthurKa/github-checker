@@ -20,21 +20,21 @@ beforeAll(async () => {
   await app.ready();
 });
 afterAll(async () => {
-  assert(!isNull(app), 'Something went wrong. |u7g5iy|');
+  assert(!isNull(app));
 
   await db().dropDatabase();
   await app.close();
 });
 beforeEach(async () => {
-  assert(!isNull(subscriptionCollection), 'Something went wrong. |zw98kf|');
+  assert(!isNull(subscriptionCollection));
 
   await subscriptionCollection.deleteMany();
 });
 
 describe('GET /unsubscribe', () => {
   it('unsubscribes successfully and deletes record', async () => {
-    assert(!isNull(app), 'Something went wrong. |hdw24i|');
-    assert(!isNull(subscriptionCollection), 'Something went wrong. |7qm2dy|');
+    assert(!isNull(app));
+    assert(!isNull(subscriptionCollection));
 
     const unsubscribeToken = UnsubscribeToken(generateUUID());
 
@@ -63,7 +63,7 @@ describe('GET /unsubscribe', () => {
   });
 
   it('returns 404 when token does not exist', async () => {
-    assert(!isNull(app), 'Something went wrong. |8ohb1t|');
+    assert(!isNull(app));
 
     const token = UnsubscribeToken(generateUUID());
 
@@ -80,8 +80,8 @@ describe('GET /unsubscribe', () => {
   });
 
   it('second call returns 404 after successful unsubscribe (idempotency)', async () => {
-    assert(!isNull(app), 'Something went wrong. |1cqn1o|');
-    assert(!isNull(subscriptionCollection), 'Something went wrong. |9fr9ix|');
+    assert(!isNull(app));
+    assert(!isNull(subscriptionCollection));
 
     const unsubscribeToken = UnsubscribeToken(generateUUID());
 
@@ -110,8 +110,8 @@ describe('GET /unsubscribe', () => {
   });
 
   it('returns 404 when trying to unsubscribe unconfirmed subscription (isConfirmed: false)', async () => {
-    assert(!isNull(app), 'Something went wrong. |77af3s|');
-    assert(!isNull(subscriptionCollection), 'Something went wrong. |0c4uis|');
+    assert(!isNull(app));
+    assert(!isNull(subscriptionCollection));
 
     const isConfirmed = false;
     const subscribeToken = SubscribeToken(generateUUID());
@@ -145,14 +145,14 @@ describe('GET /unsubscribe', () => {
     });
 
     expect(record).not.toBeNull();
-    assert(!isNull(record), 'This should never happen. |1u2w74|');
+    assert(!isNull(record));
 
     expect(record.confirmation.isConfirmed).toBe(isConfirmed);
   });
 
   it('does not delete subscription if unsubscribe token accidentally matches subscribeToken', async () => {
-    assert(!isNull(app), 'Something went wrong. |eo4hs4|');
-    assert(!isNull(subscriptionCollection), 'Something went wrong. |dz1h43|');
+    assert(!isNull(app));
+    assert(!isNull(subscriptionCollection));
 
     const isConfirmed = false;
     const subscribeToken = SubscribeToken(generateUUID());
@@ -178,13 +178,13 @@ describe('GET /unsubscribe', () => {
     });
 
     expect(record).not.toBeNull();
-    assert(!isNull(record), 'This should never happen. |a92sy0|');
+    assert(!isNull(record));
 
     expect(record.confirmation.isConfirmed).toBe(isConfirmed);
   });
 
   it('returns 400 when token format is invalid', async () => {
-    assert(!isNull(app), 'Something went wrong. |6qt6bq|');
+    assert(!isNull(app));
 
     const res = await app.inject({
       method: 'GET',

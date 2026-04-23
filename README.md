@@ -7,7 +7,7 @@
     - install ESLint VS Code extension (<https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint>)
     - make sure VS Code is using correct TypeScript version from `node_modules` local folder and not globally installed version
 1. Clone this repo.
-2. Switch Node version to the one specified in `.nvmrc` file.
+2. Make sure you are using correct versions of Node.js(`.nvmrc`) and TypeScript(`node_modules`).
 3. `npm ci` to install all dependencies.
 4. Put `.env` file with `.env.defaults` overrides in the root of the project if needed.
 5. `./do devUp` to run project dependencies.

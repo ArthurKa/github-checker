@@ -11,14 +11,14 @@ beforeAll(async () => {
   await app.ready();
 });
 afterAll(async () => {
-  assert(!isNull(app), 'Something went wrong. |0vjn9t|');
+  assert(!isNull(app));
 
   await app.close();
 });
 
 describe('GET /health', () => {
   it('should return 200', async () => {
-    assert(!isNull(app), 'Something went wrong. |2qu0zp|');
+    assert(!isNull(app));
 
     const res = await app.inject({
       method: 'GET',
