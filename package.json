@@ -7,7 +7,9 @@
     "prune:sub": "rm -rf {apps,libs}/*/node_modules",
     "prune:build": "rm -rf {apps,libs}/*/dist",
     "test": "dotenv -e .env.test -e .env.defaults -- vitest",
-    "test:noWatch": "npm run test -- run",
+    "test:noWatch": "npm run test -- run && test:types:noWatch",
+    "test:types:noWatch": "tsd --show-diff",
+    "test:types": "nodemon --delay 0.5 -w libs/common/type-tests -w libs/common/src -e ts -x \"clear && npm run test:types:noWatch\"",
     "test:unit": "npm run test -- --project unit",
     "test:unit:noWatch": "npm run test:unit -- run",
     "test:int": "npm run test -- --project int",
@@ -32,7 +34,11 @@
     "dotenv-cli": "7.4.2",
     "husky": "8.0.3",
     "semver": "7.7.2",
+    "tsd": "0.33.0",
     "vitest": "4.1.4"
+  },
+  "tsd": {
+    "directory": "libs/common/type-tests"
   },
   "workspaces": [
     "apps/*",

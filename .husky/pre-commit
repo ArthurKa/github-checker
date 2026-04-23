@@ -25,6 +25,7 @@ fi
   npm run lint --ws &&
   npm run ts:noWatch --ws &&
   npm run test:unit:noWatch &&
+  npm run test:types:noWatch &&
   true
 ) || (stashPop && false)
 stashPop
