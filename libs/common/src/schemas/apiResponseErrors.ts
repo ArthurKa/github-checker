@@ -1,4 +1,4 @@
-import { z } from 'zod/v4';
+import { z, ZodType } from 'zod/v4';
 import { customEmail, customRepoId, customRepoName, customUUID } from './customs';
 
 const UnexpectedServerError = z.object({
@@ -9,7 +9,7 @@ export type UnexpectedServerError = z.infer<typeof UnexpectedServerError>;
 
 export const eachApiRoute = {
   500: UnexpectedServerError,
-};
+} satisfies Record<number, ZodType>;
 
 const InputDataValidationError = (example: string) => (
   z.object({
@@ -21,7 +21,7 @@ export type InputDataValidationError = z.infer<ReturnType<typeof InputDataValida
 
 export const inputDataValidationError = (example: string) => ({
   400: InputDataValidationError(example),
-});
+} satisfies Record<number, ZodType>);
 
 export const GitHubLimitExceeded = z.object({
   type: z.literal('GitHubLimitExceeded'),

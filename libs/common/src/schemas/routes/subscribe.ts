@@ -1,4 +1,4 @@
-import { z } from 'zod/v4';
+import { z, ZodType } from 'zod/v4';
 import { AlreadySubscribed, eachApiRoute, GitHubLimitExceeded, inputDataValidationError, RepoNotFound } from '../apiResponseErrors';
 import { customEmail, customIntegerSecond, customRepoName } from '../customs';
 import { RepoName } from '../../brands';
@@ -28,7 +28,7 @@ export const RouteResponse = {
   503: GitHubLimitExceeded.describe('GitHub API requests limit exceeded.'),
   404: RepoNotFound.describe('Repository not found on GitHub.'),
   409: AlreadySubscribed.describe('Email already subscribed to this repository.'),
-};
+} satisfies Record<number, ZodType>;
 export type RouteResponse = z.infer<z.ZodObject<typeof RouteResponse>>;
 
 export const ResHeaders = {

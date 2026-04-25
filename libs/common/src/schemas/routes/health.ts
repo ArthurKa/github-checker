@@ -1,4 +1,4 @@
-import { z } from 'zod/v4';
+import { z, ZodType } from 'zod/v4';
 import { eachApiRoute } from '../apiResponseErrors';
 
 export const RouteResponse = {
@@ -6,5 +6,5 @@ export const RouteResponse = {
   200: z.object({
     ok: z.literal(true),
   }).describe('Service is healthy.'),
-};
+} satisfies Record<number, ZodType>;
 export type RouteResponse = z.infer<z.ZodObject<typeof RouteResponse>>;

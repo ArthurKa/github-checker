@@ -1,4 +1,4 @@
-import { z } from 'zod/v4';
+import { z, ZodType } from 'zod/v4';
 import { eachApiRoute, inputDataValidationError } from '../apiResponseErrors';
 import { customEmail, customReleaseTag, customRepoName } from '../customs';
 
@@ -18,5 +18,5 @@ export const RouteResponse = {
       lastSeenTag: customReleaseTag.nullable(),
     }),
   ).describe('Successful operation — list of subscriptions returned.'),
-};
+} satisfies Record<number, ZodType>;
 export type RouteResponse = z.infer<z.ZodObject<typeof RouteResponse>>;
