@@ -20,9 +20,10 @@ beforeAll(async () => {
   await app.ready();
 });
 afterAll(async () => {
+  await db().dropDatabase();
+
   assert(!isNull(app));
 
-  await db().dropDatabase();
   await app.close();
 });
 beforeEach(async () => {

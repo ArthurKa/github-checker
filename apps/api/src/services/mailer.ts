@@ -7,6 +7,7 @@ import { stringifyUrl } from '@repo/common/src/utils';
 import { routes } from '@repo/common/src/schemas';
 import { RepoReleases } from '@repo/common/src/schemas/github';
 import nodemailer from 'nodemailer';
+import assert from 'assert';
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
@@ -44,16 +45,21 @@ export const sendSubscriptionConfirmationMail = async ({ to, repoName, repoRelea
   });
 };
 
-export const sendReleaseUpdateMail = async ({ to, repoName, repoRelease, unsubscribeToken }: {
+export const sendReleaseUpdateMail = async ({ to, repoName, oldRepoRelease, newRepoRelease, unsubscribeToken }: {
   to: Email;
   repoName: RepoName;
-  repoRelease: RepoReleases[number] | null;
+  oldRepoRelease: RepoReleases[number] | null;
+  newRepoRelease: RepoReleases[number] | null;
   unsubscribeToken: UnsubscribeToken;
 }) => {
   const tagUpdateText = (
-    isNull(repoRelease)
-      ? 'removed all release tags.'
-      : `changed release tag to <a href="${repoRelease.html_url}">${repoRelease.tag_name}</a>. Take a look!`
+    isNull(oldRepoRelease)
+      ? isNull(newRepoRelease)
+        ? assert(false, 'Something went wrong. |6vms43|')
+        : `created its first release tag <a href="${newRepoRelease.html_url}">${newRepoRelease.tag_name}</a>. Take a look!`
+      : isNull(newRepoRelease)
+        ? `removed its only release tag <a href="${oldRepoRelease.html_url}">${oldRepoRelease.tag_name}</a>.`
+        : `changed release tag from <a href="${oldRepoRelease.html_url}">${oldRepoRelease.tag_name}</a> to <a href="${newRepoRelease.html_url}">${newRepoRelease.tag_name}</a>. Take a look!`
   );
   const subscriptionsUrl = stringifyUrl(`${API_URL}${apiUrls.subscriptions}`, {
     email: to,

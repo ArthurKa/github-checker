@@ -1,11 +1,14 @@
 import { ObjectId, WithId } from 'mongodb';
-import { ReleaseTag, RepoId, RepoName } from '@repo/common/src/brands';
+import { ReleaseTag, RepoId, RepoName, StringURL } from '@repo/common/src/brands';
 import { db } from '../../db';
 
 export type DbRepo = {
   id: RepoId;
   name: RepoName;
-  latestTag: ReleaseTag | null;
+  latestTag: null | {
+    tag: ReleaseTag;
+    url: StringURL;
+  };
 };
 
 export const repoService = {

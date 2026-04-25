@@ -6,5 +6,5 @@ export const shouldNotifyReleaseUpdate = (
   repo: null | Pick<DbRepo, 'latestTag'>,
   latestTag: DbRepo['latestTag'],
 ): repo is StrictExclude<typeof repo, null> => (
-  !isNull(repo) && repo.latestTag !== latestTag
+  !isNull(repo) && repo.latestTag?.tag !== latestTag?.tag
 );

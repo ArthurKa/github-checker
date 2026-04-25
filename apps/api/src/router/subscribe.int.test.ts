@@ -79,10 +79,11 @@ beforeAll(async () => {
   await redis.flushdb();
 });
 afterAll(async () => {
+  await db().dropDatabase();
+
   assert(!isNull(app));
   assert(!isNull(redis));
 
-  await db().dropDatabase();
   await app.close();
   await redis.quit();
 });
@@ -434,7 +435,10 @@ describe('POST /subscribe', () => {
     expect(repo).toStrictEqual({
       id: MOCK_REPO_ID,
       name: MOCK_REPO_NAME,
-      latestTag: MOCK_RELEASE_TAG,
+      latestTag: {
+        tag: MOCK_RELEASE_TAG,
+        url: MOCK_RELEASE_TAG_URL,
+      },
     });
 
     expect(mocks.sendSubscriptionConfirmationMail).toHaveBeenCalledOnce();
@@ -513,7 +517,10 @@ describe('POST /subscribe', () => {
     assert(!isNull(subscriptionCollection));
     assert(!isNull(repoCollection));
 
-    const latestTag = ReleaseTag('v1.2.3');
+    const latestTag = {
+      tag: ReleaseTag('v1.2.3'),
+      url: StringURL('https://asd.com'),
+    } satisfies DbRepo['latestTag'];
 
     await subscriptionCollection.insertMany([
       {
@@ -570,7 +577,10 @@ describe('POST /subscribe', () => {
     assert(!isNull(subscriptionCollection));
     assert(!isNull(repoCollection));
 
-    const latestTag = ReleaseTag('v1.2.3');
+    const latestTag = {
+      tag: ReleaseTag('v1.2.3'),
+      url: StringURL('https://asd.com'),
+    } satisfies DbRepo['latestTag'];
 
     mocks.getRepoLatestReleaseByRepoName.mockResolvedValue({
       success: true,

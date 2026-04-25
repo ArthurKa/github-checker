@@ -6,7 +6,7 @@ import { SubscribeToken } from '@repo/common/src/brands';
 import { subscriptionService } from '../services/db/subscriptionService';
 import { getRepoByRepoName } from '../services/fetch/github/getRepoByRepoName';
 import { cacheRepoLatestReleaseById, getRepoLatestReleaseByRepoName } from '../services/fetch/github/getRepoLatestRelease';
-import { repoService } from '../services/db/repoService';
+import { DbRepo, repoService } from '../services/db/repoService';
 import { sendSubscriptionConfirmationMail } from '../services/mailer';
 import { shouldNotifyReleaseUpdate } from '../utils/shouldNotifyReleaseUpdate';
 import { notifyReleaseUpdate } from '../utils/notifyReleaseUpdate';
@@ -67,7 +67,10 @@ export const mountSubscribe = (app: App) => {
 
     await cacheRepoLatestReleaseById(githubRepo.data.id, repoLatestRelease.data);
 
-    const latestTag = isNull(repoLatestRelease.data) ? null : repoLatestRelease.data.tag_name;
+    const latestTag = isNull(repoLatestRelease.data) ? null : {
+      tag: repoLatestRelease.data.tag_name,
+      url: repoLatestRelease.data.html_url,
+    } satisfies DbRepo['latestTag'];
     const [subscription, repoBefore] = await Promise.all([
       subscriptionService.create({
         email: req.body.email,

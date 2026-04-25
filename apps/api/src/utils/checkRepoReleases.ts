@@ -3,7 +3,7 @@ import { subscriptionService } from '../services/db/subscriptionService';
 import { cacheRepoLatestReleaseByName, getRepoLatestReleaseByRepoId } from '../services/fetch/github/getRepoLatestRelease';
 import { notify } from '../services/notifier/notify';
 import { shouldNotifyReleaseUpdate } from './shouldNotifyReleaseUpdate';
-import { repoService } from '../services/db/repoService';
+import { DbRepo, repoService } from '../services/db/repoService';
 import { sendReleaseUpdateMail } from '../services/mailer';
 
 export const checkRepoReleases = async () => {
@@ -27,7 +27,10 @@ export const checkRepoReleases = async () => {
 
     await cacheRepoLatestReleaseByName(repo.name, repoLatestRelease.data);
 
-    const latestTag = isNull(repoLatestRelease.data) ? null : repoLatestRelease.data.tag_name;
+    const latestTag = isNull(repoLatestRelease.data) ? null : {
+      tag: repoLatestRelease.data.tag_name,
+      url: repoLatestRelease.data.html_url,
+    } satisfies DbRepo['latestTag'];
 
     if(!shouldNotifyReleaseUpdate(repo, latestTag)) {
       continue;
@@ -43,7 +46,11 @@ export const checkRepoReleases = async () => {
         sendReleaseUpdateMail({
           to: email,
           repoName: repo.name,
-          repoRelease: repoLatestRelease.data,
+          oldRepoRelease: isNull(repo.latestTag) ? null : {
+            tag_name: repo.latestTag.tag,
+            html_url: repo.latestTag.url,
+          },
+          newRepoRelease: repoLatestRelease.data,
           unsubscribeToken,
         })
       )),

@@ -1,6 +1,6 @@
 import { routes } from '@repo/common/src/schemas';
 import { apiUrls } from '@repo/common/src/commonUrls';
-import { getNotUndefined } from '@arthurka/ts-utils';
+import { getNotUndefined, isNull } from '@arthurka/ts-utils';
 import { subscriptionService } from '../services/db/subscriptionService';
 import { repoService } from '../services/db/repoService';
 import type { App } from '../app';
@@ -27,7 +27,7 @@ export const mountSubscriptions = (app: App) => {
           email,
           repo: name,
           isConfirmed: confirmation.isConfirmed,
-          lastSeenTag: latestTag,
+          lastSeenTag: isNull(latestTag) ? null : latestTag.tag,
         };
       }),
     );

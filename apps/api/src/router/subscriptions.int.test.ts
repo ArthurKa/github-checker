@@ -2,7 +2,7 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import assert from 'assert';
 import { isNull } from '@arthurka/ts-utils';
 import { Collection } from 'mongodb';
-import { Email, ReleaseTag, RepoId, RepoName, UnsubscribeToken } from '@repo/common/src/brands';
+import { Email, ReleaseTag, RepoId, RepoName, StringURL, UnsubscribeToken } from '@repo/common/src/brands';
 import { generateUUID, stringifyUrl } from '@repo/common/src/utils';
 import { routes } from '@repo/common/src/schemas';
 import { processEnvFlags } from '@repo/common/src/utils/processEnvFlags';
@@ -24,9 +24,10 @@ beforeAll(async () => {
   await app.ready();
 });
 afterAll(async () => {
+  await db().dropDatabase();
+
   assert(!isNull(app));
 
-  await db().dropDatabase();
   await app.close();
 });
 beforeEach(async () => {
@@ -59,7 +60,10 @@ describe('GET /subscriptions', () => {
 
     const repoId = RepoId(123);
     const repoName = RepoName('owner/repo');
-    const releaseTag = ReleaseTag('v1.0.0');
+    const releaseTag = {
+      tag: ReleaseTag('v1.0.0'),
+      url: StringURL('https://asd.com'),
+    } satisfies DbRepo['latestTag'];
     const email = Email('test@example.com');
     const isConfirmed = true;
 
@@ -92,7 +96,7 @@ describe('GET /subscriptions', () => {
         email,
         repo: repoName,
         isConfirmed,
-        lastSeenTag: releaseTag,
+        lastSeenTag: releaseTag.tag,
       },
     ] satisfies routes.subscriptions.RouteResponse[200]);
   });
