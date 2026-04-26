@@ -1,7 +1,8 @@
 // @ts-check
 'use strict';
 
-import tsUtils from '@arthurka/ts-utils';
+import { isNull } from '@arthurka/ts-utils';
+import { StringURL } from '@repo/common/src/brands';
 
 /**
   @typedef DbRepo
@@ -29,9 +30,9 @@ export default ((/** @type {Pick<import('migrate-mongo'), 'up'>} */ e) => e)({
     for await (const { _id, name, latestTag } of oldCollection.find()) {
       await collection.updateOne({ _id }, {
         $set: {
-          latestTag: tsUtils.isNull(latestTag) ? null : {
+          latestTag: isNull(latestTag) ? null : {
             tag: latestTag,
-            url: /** @type {import('@repo/common/src/brands').StringURL} */ (`https://github.com/${name}/releases/tag/${latestTag}`),
+            url: StringURL(`https://github.com/${name}/releases/tag/${latestTag}`),
           },
         },
       });

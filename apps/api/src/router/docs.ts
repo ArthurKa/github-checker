@@ -29,16 +29,6 @@ export const mountDocs = async (app: App) => {
     },
   });
 
-  await app.register(scalarUI, {
-    routePrefix: apiUrls.docs.scalar,
-    configuration: {
-      pageTitle: 'GitHub Checker API',
-      theme: 'fastify',
-      defaultOpenAllTags: true,
-      hideClientButton: true,
-      showDeveloperTools: NODE_ENV === 'production' ? 'never' : 'always',
-    },
-  });
   await app.register(swaggerUI, {
     routePrefix: apiUrls.docs.swagger,
     uiConfig: {
@@ -56,6 +46,16 @@ export const mountDocs = async (app: App) => {
           `,
         },
       ],
+    },
+  });
+  await app.register(scalarUI, {
+    routePrefix: apiUrls.docs.scalar,
+    configuration: {
+      pageTitle: 'GitHub Checker API',
+      theme: 'fastify',
+      defaultOpenAllTags: true,
+      hideClientButton: true,
+      showDeveloperTools: NODE_ENV === 'production' ? 'never' : 'always',
     },
   });
 };

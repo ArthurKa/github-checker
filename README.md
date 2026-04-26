@@ -9,7 +9,7 @@
 1. Clone this repo.
 2. Make sure you are using correct versions of Node.js(`.nvmrc`) and TypeScript(`node_modules`).
 3. `npm ci` to install all dependencies.
-4. Put `.env` file with `.env.defaults` overrides in the root of the project if needed.
+4. OPTIONAL: Create a `.env` file in the root directory to override specific values from `.env.defaults`.
 5. `./do devUp` to run project dependencies.
 
 ### Certificates

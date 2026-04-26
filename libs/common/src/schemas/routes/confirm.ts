@@ -10,7 +10,7 @@ export type UrlParams = z.infer<typeof UrlParams>;
 export const RouteResponse = {
   ...eachApiRoute,
   ...inputDataValidationError('params/token "super-token" of type String is not valid SubscribeToken'),
-  200: z.literal(true).describe('Subscription confirmed successfully.'),
   404: TokenNotFound.describe('Token not found.'),
+  200: z.literal(true).describe('Subscription confirmed successfully.'),
 } satisfies Record<number, ZodType>;
 export type RouteResponse = z.infer<z.ZodObject<typeof RouteResponse>>;
